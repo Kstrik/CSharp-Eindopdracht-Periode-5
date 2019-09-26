@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battleship", "Battleship\Battleship.csproj", "{6F5DC83D-F6F2-461A-8861-9A692F4E1662}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MLlib", "MLlib\MLlib.csproj", "{DBFDB884-31C6-4E29-8EE7-E61875F1BF2D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F5DC83D-F6F2-461A-8861-9A692F4E1662}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F5DC83D-F6F2-461A-8861-9A692F4E1662}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F5DC83D-F6F2-461A-8861-9A692F4E1662}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F5DC83D-F6F2-461A-8861-9A692F4E1662}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBFDB884-31C6-4E29-8EE7-E61875F1BF2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBFDB884-31C6-4E29-8EE7-E61875F1BF2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBFDB884-31C6-4E29-8EE7-E61875F1BF2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBFDB884-31C6-4E29-8EE7-E61875F1BF2D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {630661BC-F43A-4967-A5C3-0E6ECA9FC5F3}
+	EndGlobalSection
+EndGlobal

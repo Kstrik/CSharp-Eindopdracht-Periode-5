@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLlib", "MLlib\MLlib.csproj", "{11ED581E-9BDD-404E-851C-4FF9018D6403}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MLlibTest", "MLlibTest\MLlibTest.csproj", "{EB972E14-C24D-491D-A1D0-76E232A0A058}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11ED581E-9BDD-404E-851C-4FF9018D6403}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11ED581E-9BDD-404E-851C-4FF9018D6403}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11ED581E-9BDD-404E-851C-4FF9018D6403}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11ED581E-9BDD-404E-851C-4FF9018D6403}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB972E14-C24D-491D-A1D0-76E232A0A058}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB972E14-C24D-491D-A1D0-76E232A0A058}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB972E14-C24D-491D-A1D0-76E232A0A058}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB972E14-C24D-491D-A1D0-76E232A0A058}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A4F073A3-3B5C-4329-9F0F-A302BD3CC7B8}
+	EndGlobalSection
+EndGlobal
