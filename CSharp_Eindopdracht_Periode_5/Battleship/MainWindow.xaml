@@ -7,6 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <!--<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBox x:Name="txb_Textbox" Width="200" Height="20"></TextBox>
+            <Button Content="StartGame" Width="200" Height="20" Click="StartGame_Click"></Button>
+            <Button Content="StopGame" Width="200" Height="20"  Click="StopGame_Click"></Button>
+            <Viewport3D x:Name="vwp_Viewport" Width="500" Height="200"></Viewport3D>
+        </StackPanel>-->
     </Grid>
 </Window>
