@@ -8,7 +8,7 @@ namespace Battleship
 {
     public class Timing
     {
-        public static Timing instance;
+        private static Timing instance;
 
         private DateTime time1;
         private DateTime time2;

@@ -27,7 +27,7 @@ namespace Battleship
             InitializeComponent();
             Viewport3D viewport = new Viewport3D();
             this.Content = viewport;
-            this.game = new Game(Application.Current.Dispatcher, null, viewport);
+            this.game = new Game(Application.Current.Dispatcher, viewport);
 
             this.Closing += MainWindow_Closing;
             this.game.Start();
@@ -35,14 +35,14 @@ namespace Battleship
             this.KeyUp += MainWindow_KeyUp;
         }
 
-        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
-        {
-            this.game.OnKeyDown(e.Key);
-        }
-
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            this.game.OnKeyUp(e.Key);
+            GameInput.OnKeyDown(e.Key);
+        }
+
+        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            GameInput.OnKeyUp(e.Key);
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -53,13 +53,11 @@ namespace Battleship
         private void StartGame_Click(object sender, RoutedEventArgs e)
         {
             this.game.Start();
-            //txb_Textbox.Text = "Game started!";
         }
 
         private void StopGame_Click(object sender, RoutedEventArgs e)
         {
             this.game.Stop();
-            //txb_Textbox.Text = "Game stoped!";
         }
     }
 }

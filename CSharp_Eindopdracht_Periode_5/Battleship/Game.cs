@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 
@@ -23,8 +24,6 @@ namespace Battleship
 
         private bool isRunning;
 
-        private TextBox textBox;
-
         private GameObject gameObject;
         private Viewport3D viewport;
         private Model3DGroup modelGroup;
@@ -32,8 +31,13 @@ namespace Battleship
 
         private PerspectiveCamera myPCamera;
 
-        public Game(Dispatcher dispatcher, TextBox textBox, Viewport3D viewport)
+        private World world;
+
+        public Game(Dispatcher dispatcher, Viewport3D viewport)
         {
+            GameInput.KeyDown += OnKeyDown;
+            GameInput.KeyUp += OnKeyUp;
+
             myPCamera = new PerspectiveCamera();
             myPCamera.Position = new Point3D(0, 2, 10);
             myPCamera.LookDirection = new System.Windows.Media.Media3D.Vector3D(0, 0, -1);
@@ -52,12 +56,12 @@ namespace Battleship
             this.modelGroup.Children.Add(myDirectionalLight);
 
             this.mainDispatcher = dispatcher;
-            this.textBox = textBox;
             this.timing = Timing.GetInstance();
             this.isRunning = false;
 
             this.gameObject = new GameObject();
             this.gameObject.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Kenley Strik\Desktop\M4.obj"));
+            this.gameObject.Material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\M4_Albedo.png", UriKind.Absolute))));
             this.modelGroup.Children.Add(this.gameObject.GeometryModel);
         }
 
@@ -111,8 +115,6 @@ namespace Battleship
 
                 //this.gameObject.velocity += new Vector3D(0, 0.5 * deltatime, 0);
                 //this.gameObject.angle += 90 * deltatime;
-
-                //this.textBox.Text = $"Deltatime: {deltatime.ToString()}";
             }));
         }
 
@@ -120,11 +122,11 @@ namespace Battleship
         {
             if (key == Key.W)
                 this.gameObject.velocity = new Vector3D(0, 0, -4);
-            else if(key == Key.S)
+            else if (key == Key.S)
                 this.gameObject.velocity = new Vector3D(0, 0, 4);
-            else if(key == Key.A)
+            else if (key == Key.A)
                 this.gameObject.velocity = new Vector3D(-4, 0, 0);
-            else if(key == Key.D)
+            else if (key == Key.D)
                 this.gameObject.velocity = new Vector3D(4, 0, 0);
         }
 
@@ -132,11 +134,11 @@ namespace Battleship
         {
             if (key == Key.W)
                 this.gameObject.velocity = new Vector3D(0, 0, -4);
-            else if(key == Key.S)
+            else if (key == Key.S)
                 this.gameObject.velocity = new Vector3D(0, 0, 4);
-            else if(key == Key.A)
+            else if (key == Key.A)
                 this.gameObject.velocity = new Vector3D(-4, 0, 0);
-            else if(key == Key.D)
+            else if (key == Key.D)
                 this.gameObject.velocity = new Vector3D(4, 0, 0);
         }
     }

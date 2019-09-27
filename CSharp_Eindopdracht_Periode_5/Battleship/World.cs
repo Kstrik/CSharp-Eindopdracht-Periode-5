@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Media.Media3D;
 
 namespace Battleship
 {
     public class World
     {
+        private Model3DGroup modelGroup;
+        private ModelVisual3D modelVisual;
+
         private List<Light> lights;
         private List<GameObject> gameObjects;
-
         private List<Camera> cameras;
         public Camera CurrentCamera
         {
@@ -21,11 +24,14 @@ namespace Battleship
         }
         private Camera currentCamera;
 
-        public World()
+        public World(ref Viewport3D viewport)
         {
+            this.modelGroup = new Model3DGroup();
+            this.modelVisual = new ModelVisual3D();
+            this.modelVisual.Content = this.modelGroup;
+
             this.lights = new List<Light>();
             this.gameObjects = new List<GameObject>();
-
             this.cameras = new List<Camera>();
         }
 

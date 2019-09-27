@@ -24,6 +24,13 @@ namespace Battleship.GameObjects
         }
         private GeometryModel3D geometryModel;
 
+        public Material Material
+        {
+            get { return this.material; }
+            set { SetMaterial(value); }
+        }
+        private Material material;
+
         public Vector3D position;
         public Vector3D velocity;
         public Vector3D rotateAxis;
@@ -51,7 +58,9 @@ namespace Battleship.GameObjects
             this.position += this.velocity * deltatime;
 
             UpdateTransformations();
-            this.geometryModel.Transform = this.transform;
+
+            if(this.geometryModel != null)
+                this.geometryModel.Transform = this.transform;
         }
 
         private void UpdateTransformations()
@@ -69,14 +78,31 @@ namespace Battleship.GameObjects
 
         private void SetGeometryModel(GeometryModel3D geometryModel)
         {
-            this.geometryModel = geometryModel;
-            this.geometryModel.Transform = this.transform;
+            if(geometryModel != null)
+            {
+                this.geometryModel = geometryModel;
+                this.geometryModel.Transform = this.transform;
 
-            ImageBrush colors_brush = new ImageBrush();
-            colors_brush.ImageSource = new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\M4_Albedo.png", UriKind.Absolute));
-            DiffuseMaterial myDiffuseMaterial = new DiffuseMaterial(colors_brush);
-            this.geometryModel.Material = myDiffuseMaterial;
-            this.geometryModel.BackMaterial = myDiffuseMaterial;
+                if (this.material != null)
+                {
+                    this.geometryModel.Material = this.material;
+                    this.geometryModel.BackMaterial = this.material;
+                }
+            }
+        }
+
+        private void SetMaterial(Material material)
+        {
+            if(material != null)
+            {
+                this.material = material;
+
+                if (this.geometryModel != null)
+                {
+                    this.geometryModel.Material = this.material;
+                    this.geometryModel.BackMaterial = this.material;
+                }
+            }
         }
     }
 }
