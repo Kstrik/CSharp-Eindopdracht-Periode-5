@@ -20,21 +20,26 @@ namespace Battleship
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Viewport3D viewport;
         private Game game;
 
         public MainWindow()
         {
             InitializeComponent();
-            Viewport3D viewport = new Viewport3D();
-            this.Content = viewport;
-            this.game = new Game(Application.Current.Dispatcher, ref viewport);
+            this.viewport = new Viewport3D();
+            this.Content = this.viewport;
+            this.game = new Game(Application.Current.Dispatcher, ref this.viewport);
 
             this.Closing += MainWindow_Closing;
             this.game.Start();
             this.KeyDown += MainWindow_KeyDown;
             this.KeyUp += MainWindow_KeyUp;
-        }
+            this.MouseDown += MainWindow_MouseDown;
+            this.MouseUp += MainWindow_MouseUp;
+            this.MouseMove += MainWindow_MouseMove;
 
+            //this.Cursor = Cursors.None;
+        }
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             GameInput.OnKeyDown(e.Key);
@@ -43,6 +48,22 @@ namespace Battleship
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
             GameInput.OnKeyUp(e.Key);
+        }
+
+        private void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            GameInput.OnMouseDown(e.ChangedButton, e.GetPosition(this.viewport));
+        }
+
+        private void MainWindow_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            GameInput.OnMouseUp(e.ChangedButton, e.GetPosition(this.viewport));
+        }
+
+        private void MainWindow_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(e.MiddleButton == MouseButtonState.Pressed)
+                GameInput.OnMouseMove(e.GetPosition(this.viewport));
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

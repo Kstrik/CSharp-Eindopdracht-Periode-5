@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GameCamera.cs" />
     <Compile Include="GameInput.cs" />
     <Compile Include="World.cs" />
     <Page Include="MainWindow.xaml">

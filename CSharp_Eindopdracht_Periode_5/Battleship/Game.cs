@@ -24,35 +24,39 @@ namespace Battleship
 
         private bool isRunning;
 
-        private GameObject gameObject;
-
         private World world;
+        private GameCamera gameCamera;
 
         public Game(Dispatcher dispatcher, ref Viewport3D viewport)
         {
-            GameInput.KeyDown += OnKeyDown;
-            GameInput.KeyUp += OnKeyUp;
-
             this.timing = Timing.GetInstance();
             this.mainDispatcher = dispatcher;
             this.world = new World(this, ref viewport);
             this.isRunning = false;
 
-            PerspectiveCamera camera = new PerspectiveCamera();
-            camera.Position = new Point3D(0, 2, 10);
-            camera.LookDirection = new System.Windows.Media.Media3D.Vector3D(0, 0, -1);
-            camera.FieldOfView = 60;
-            this.world.CurrentCamera = camera;
+            //PerspectiveCamera camera = new PerspectiveCamera();
+            //camera.Position = new Point3D(0, 2, 10);
+            //camera.LookDirection = new System.Windows.Media.Media3D.Vector3D(0, 0, -1);
+            //camera.FieldOfView = 60;
+            this.gameCamera = new GameCamera();
+            this.world.CurrentCamera = this.gameCamera.GetCamera();
 
             DirectionalLight myDirectionalLight = new DirectionalLight();
             myDirectionalLight.Color = Colors.White;
             myDirectionalLight.Direction = new System.Windows.Media.Media3D.Vector3D(0, -1, -1);
             this.world.AddLight(myDirectionalLight);
 
-            this.gameObject = new GameObject();
-            this.gameObject.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Kenley Strik\Desktop\M4.obj"));
-            this.gameObject.Material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\M4_Albedo.png", UriKind.Absolute))));
-            this.world.AddGameObject(gameObject);
+            GameObject gameObject1 = new GameObject();
+            gameObject1.Position = new Vector3D(1, 0, 0);
+            gameObject1.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Kenley Strik\Desktop\cars.obj"));
+            gameObject1.Material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\gencar_blue.png", UriKind.Absolute))));
+            this.world.AddGameObject(gameObject1);
+
+            GameObject gameObject2 = new GameObject();
+            gameObject2.Position = new Vector3D(0, 0, 0);
+            gameObject2.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Kenley Strik\Desktop\cars.obj"));
+            gameObject2.Material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\gencar_blue.png", UriKind.Absolute))));
+            this.world.AddGameObject(gameObject2);
         }
 
         private void InitiliazeThread()
@@ -101,40 +105,14 @@ namespace Battleship
         {
             DispatchAction(new Action(() =>
             {
+                this.gameCamera.Update(deltatime);
                 this.world.Update(deltatime);
-
-                //this.gameObject.velocity += new Vector3D(0, 0.5 * deltatime, 0);
-                //this.gameObject.angle += 90 * deltatime;
             }));
         }
 
         public void DispatchAction(Action action)
         {
             this.mainDispatcher.Invoke(DispatcherPriority.Background, action);
-        }
-
-        public void OnKeyDown(Key key)
-        {
-            if (key == Key.W)
-                this.gameObject.velocity = new Vector3D(0, 0, -4);
-            else if (key == Key.S)
-                this.gameObject.velocity = new Vector3D(0, 0, 4);
-            else if (key == Key.A)
-                this.gameObject.velocity = new Vector3D(-4, 0, 0);
-            else if (key == Key.D)
-                this.gameObject.velocity = new Vector3D(4, 0, 0);
-        }
-
-        public void OnKeyUp(Key key)
-        {
-            if (key == Key.W)
-                this.gameObject.velocity = new Vector3D(0, 0, -4);
-            else if (key == Key.S)
-                this.gameObject.velocity = new Vector3D(0, 0, 4);
-            else if (key == Key.A)
-                this.gameObject.velocity = new Vector3D(-4, 0, 0);
-            else if (key == Key.D)
-                this.gameObject.velocity = new Vector3D(4, 0, 0);
         }
     }
 }

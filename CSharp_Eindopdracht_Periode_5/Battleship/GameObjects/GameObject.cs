@@ -11,7 +11,7 @@ namespace Battleship.GameObjects
 {
     public class GameObject
     {
-        private Transform3DGroup transform;
+        protected Transform3DGroup transform;
         private TranslateTransform3D translation;
         private RotateTransform3D rotation;
         private AxisAngleRotation3D axisAngle;
@@ -31,19 +31,19 @@ namespace Battleship.GameObjects
         }
         private Material material;
 
-        public Vector3D position;
-        public Vector3D velocity;
-        public Vector3D rotateAxis;
-        public double angle;
-        public Vector3D scaling;
+        public Vector3D Position;
+        public Vector3D Velocity;
+        public Vector3D RotateAxis;
+        public double Angle;
+        public Vector3D Scaling;
 
         public GameObject()
         {
-            this.position = new Vector3D(0, 0, 0);
-            this.velocity = new Vector3D(0, 0, 0);
-            this.rotateAxis = new Vector3D(0, 1, 0);
-            this.angle = 0;
-            this.scaling = new Vector3D(1, 1, 1);
+            this.Position = new Vector3D(0, 0, 0);
+            this.Velocity = new Vector3D(0, 0, 0);
+            this.RotateAxis = new Vector3D(0, 1, 0);
+            this.Angle = 0;
+            this.Scaling = new Vector3D(1, 1, 1);
 
             this.transform = new Transform3DGroup();
             UpdateTransformations();
@@ -55,7 +55,7 @@ namespace Battleship.GameObjects
 
         public void Update(float deltatime)
         {
-            this.position += this.velocity * deltatime;
+            this.Position += this.Velocity * deltatime;
 
             UpdateTransformations();
 
@@ -66,10 +66,10 @@ namespace Battleship.GameObjects
         private void UpdateTransformations()
         {
             this.transform.Children.Clear();
-            this.translation = new TranslateTransform3D(this.position);
-            this.axisAngle = new AxisAngleRotation3D(this.rotateAxis, this.angle);
+            this.translation = new TranslateTransform3D(this.Position);
+            this.axisAngle = new AxisAngleRotation3D(this.RotateAxis, this.Angle);
             this.rotation = new RotateTransform3D(this.axisAngle);
-            this.scale = new ScaleTransform3D(this.scaling);
+            this.scale = new ScaleTransform3D(this.Scaling);
 
             this.transform.Children.Add(this.translation);
             this.transform.Children.Add(this.rotation);
