@@ -27,7 +27,7 @@ namespace Battleship
             InitializeComponent();
             Viewport3D viewport = new Viewport3D();
             this.Content = viewport;
-            this.game = new Game(Application.Current.Dispatcher, viewport);
+            this.game = new Game(Application.Current.Dispatcher, ref viewport);
 
             this.Closing += MainWindow_Closing;
             this.game.Start();

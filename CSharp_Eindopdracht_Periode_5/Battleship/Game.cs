@@ -25,44 +25,34 @@ namespace Battleship
         private bool isRunning;
 
         private GameObject gameObject;
-        private Viewport3D viewport;
-        private Model3DGroup modelGroup;
-        private ModelVisual3D modelVisual;
-
-        private PerspectiveCamera myPCamera;
 
         private World world;
 
-        public Game(Dispatcher dispatcher, Viewport3D viewport)
+        public Game(Dispatcher dispatcher, ref Viewport3D viewport)
         {
             GameInput.KeyDown += OnKeyDown;
             GameInput.KeyUp += OnKeyUp;
 
-            myPCamera = new PerspectiveCamera();
-            myPCamera.Position = new Point3D(0, 2, 10);
-            myPCamera.LookDirection = new System.Windows.Media.Media3D.Vector3D(0, 0, -1);
-            myPCamera.FieldOfView = 60;
-            viewport.Camera = myPCamera;
+            this.timing = Timing.GetInstance();
+            this.mainDispatcher = dispatcher;
+            this.world = new World(this, ref viewport);
+            this.isRunning = false;
 
-            this.viewport = viewport;
-            this.modelGroup = new Model3DGroup();
-            this.modelVisual = new ModelVisual3D();
-            this.modelVisual.Content = this.modelGroup;
-            this.viewport.Children.Add(this.modelVisual);
+            PerspectiveCamera camera = new PerspectiveCamera();
+            camera.Position = new Point3D(0, 2, 10);
+            camera.LookDirection = new System.Windows.Media.Media3D.Vector3D(0, 0, -1);
+            camera.FieldOfView = 60;
+            this.world.CurrentCamera = camera;
 
             DirectionalLight myDirectionalLight = new DirectionalLight();
             myDirectionalLight.Color = Colors.White;
             myDirectionalLight.Direction = new System.Windows.Media.Media3D.Vector3D(0, -1, -1);
-            this.modelGroup.Children.Add(myDirectionalLight);
-
-            this.mainDispatcher = dispatcher;
-            this.timing = Timing.GetInstance();
-            this.isRunning = false;
+            this.world.AddLight(myDirectionalLight);
 
             this.gameObject = new GameObject();
             this.gameObject.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Kenley Strik\Desktop\M4.obj"));
             this.gameObject.Material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\M4_Albedo.png", UriKind.Absolute))));
-            this.modelGroup.Children.Add(this.gameObject.GeometryModel);
+            this.world.AddGameObject(gameObject);
         }
 
         private void InitiliazeThread()
@@ -109,13 +99,18 @@ namespace Battleship
 
         private void Update(float deltatime)
         {
-            this.mainDispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+            DispatchAction(new Action(() =>
             {
-                this.gameObject.Update(deltatime);
+                this.world.Update(deltatime);
 
                 //this.gameObject.velocity += new Vector3D(0, 0.5 * deltatime, 0);
                 //this.gameObject.angle += 90 * deltatime;
             }));
+        }
+
+        public void DispatchAction(Action action)
+        {
+            this.mainDispatcher.Invoke(DispatcherPriority.Background, action);
         }
 
         public void OnKeyDown(Key key)

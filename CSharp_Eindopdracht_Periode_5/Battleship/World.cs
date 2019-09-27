@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Media3D;
+using System.Windows.Threading;
 
 namespace Battleship
 {
@@ -14,8 +15,8 @@ namespace Battleship
         private Model3DGroup modelGroup;
         private ModelVisual3D modelVisual;
 
-        private List<Light> lights;
         private List<GameObject> gameObjects;
+        private List<Light> lights;
         private List<Camera> cameras;
         public Camera CurrentCamera
         {
@@ -24,15 +25,64 @@ namespace Battleship
         }
         private Camera currentCamera;
 
-        public World(ref Viewport3D viewport)
+        private Game game;
+        private Viewport3D viewport;
+
+        public World(Game game, ref Viewport3D viewport)
         {
             this.modelGroup = new Model3DGroup();
             this.modelVisual = new ModelVisual3D();
             this.modelVisual.Content = this.modelGroup;
+            viewport.Children.Add(this.modelVisual);
 
-            this.lights = new List<Light>();
             this.gameObjects = new List<GameObject>();
+            this.lights = new List<Light>();
             this.cameras = new List<Camera>();
+
+            this.game = game;
+            this.viewport = viewport;
+        }
+
+        public void Update(float deltatime)
+        {
+            foreach (GameObject gameObject in this.gameObjects)
+                gameObject.Update(deltatime);
+        }
+
+        public void AddGameObject(GameObject gameObject)
+        {
+            if (gameObject != null)
+            {
+                this.gameObjects.Add(gameObject);
+                this.game.DispatchAction(new Action(() => modelGroup.Children.Add(gameObject.GeometryModel)));
+            }
+        }
+
+        public void RemoveGameObject(GameObject gameObject)
+        {
+            if (gameObject != null)
+            {
+                this.gameObjects.Remove(gameObject);
+                this.game.DispatchAction(new Action(() => modelGroup.Children.Remove(gameObject.GeometryModel)));
+            }
+        }
+
+        public void AddLight(Light light)
+        {
+            if (light != null)
+            {
+                this.lights.Add(light);
+                this.game.DispatchAction(new Action(() => modelGroup.Children.Add(light)));
+            }
+        }
+
+        public void RemoveLight(Light light)
+        {
+            if (light != null)
+            {
+                this.lights.Remove(light);
+                this.game.DispatchAction(new Action(() => modelGroup.Children.Remove(light)));
+            }
         }
 
         public void AddCamera(Camera camera)
@@ -60,6 +110,7 @@ namespace Battleship
                     this.cameras.Add(camera);
 
                 this.currentCamera = camera;
+                this.game.DispatchAction(new Action(() => this.viewport.Camera = this.currentCamera));
             }
         }
     }
