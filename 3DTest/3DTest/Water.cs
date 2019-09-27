@@ -50,7 +50,7 @@ namespace _3DTest
             InitializeTimer();
 
             ImageBrush brush = new ImageBrush();
-            brush.ImageSource = new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\1.jpg", UriKind.Absolute));
+            brush.ImageSource = new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\M4_Albedo.png", UriKind.Absolute));
             System.Windows.Media.Media3D.DiffuseMaterial waterMaterial = new System.Windows.Media.Media3D.DiffuseMaterial(brush);
             this.waterPlane.GetModel().Material = waterMaterial;
             this.waterPlane.GetModel().BackMaterial = waterMaterial;

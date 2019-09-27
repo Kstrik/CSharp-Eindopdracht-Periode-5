@@ -41,7 +41,7 @@ namespace _3DTest
             //    }
             //}
             OBJModelLoader modelLoader = new OBJModelLoader();
-            Tuple<MeshGeometry3D, GeometryModel3D> modelLoadResults = ModelUtil.ConvertModel(modelLoader.LoadModel(@"C:\Users\Kenley Strik\Desktop\Tile2.obj"));
+            Tuple<MeshGeometry3D, GeometryModel3D> modelLoadResults = ModelUtil.ConvertModel(modelLoader.LoadModel(@"C:\Users\Kenley Strik\Desktop\M4.obj"));
             this.model = modelLoadResults.Item2;
             this.mesh = modelLoadResults.Item1;
         }

@@ -31,6 +31,18 @@ namespace Battleship
 
             this.Closing += MainWindow_Closing;
             this.game.Start();
+            this.KeyDown += MainWindow_KeyDown;
+            this.KeyUp += MainWindow_KeyUp;
+        }
+
+        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            this.game.OnKeyDown(e.Key);
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            this.game.OnKeyUp(e.Key);
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

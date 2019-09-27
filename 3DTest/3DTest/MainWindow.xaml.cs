@@ -56,7 +56,7 @@ namespace _3DTest
             // Declare scene objects.
             Viewport3D myViewport3D = new Viewport3D();
             Model3DGroup myModel3DGroup = new Model3DGroup();
-            GeometryModel3D myGeometryModel = ConvertModel(modelLoader.LoadModel(@"C:\Users\Kenley Strik\Desktop\Board.obj"));
+            GeometryModel3D myGeometryModel = ConvertModel(modelLoader.LoadModel(@"C:\Users\Kenley Strik\Desktop\M4.obj"));
             ModelVisual3D myModelVisual3D = new ModelVisual3D();
             // Defines the camera used to view the 3D object. In order to view the 3D object,
             // the camera must be positioned and pointed such that the object is within view 
@@ -81,7 +81,7 @@ namespace _3DTest
             myModel3DGroup.Children.Add(myDirectionalLight);
 
             ImageBrush colors_brush = new ImageBrush();
-            colors_brush.ImageSource = new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\Wood.jpg", UriKind.Absolute));
+            colors_brush.ImageSource = new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\M4_Albedo.png", UriKind.Absolute));
             DiffuseMaterial myDiffuseMaterial = new DiffuseMaterial(colors_brush);
             myGeometryModel.Material = myDiffuseMaterial;
             myGeometryModel.BackMaterial = myDiffuseMaterial;

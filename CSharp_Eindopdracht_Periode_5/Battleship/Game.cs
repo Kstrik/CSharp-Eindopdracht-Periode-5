@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
@@ -31,8 +32,6 @@ namespace Battleship
 
         private PerspectiveCamera myPCamera;
 
-        private float angle = 0;
-
         public Game(Dispatcher dispatcher, TextBox textBox, Viewport3D viewport)
         {
             myPCamera = new PerspectiveCamera();
@@ -47,7 +46,6 @@ namespace Battleship
             this.modelVisual.Content = this.modelGroup;
             this.viewport.Children.Add(this.modelVisual);
 
-            
             DirectionalLight myDirectionalLight = new DirectionalLight();
             myDirectionalLight.Color = Colors.White;
             myDirectionalLight.Direction = new System.Windows.Media.Media3D.Vector3D(0, -1, -1);
@@ -59,7 +57,7 @@ namespace Battleship
             this.isRunning = false;
 
             this.gameObject = new GameObject();
-            this.gameObject.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Kenley Strik\Desktop\Tree.obj"));
+            this.gameObject.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Kenley Strik\Desktop\M4.obj"));
             this.modelGroup.Children.Add(this.gameObject.GeometryModel);
         }
 
@@ -110,16 +108,36 @@ namespace Battleship
             this.mainDispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
             {
                 this.gameObject.Update(deltatime);
-                //this.angle += 10 * deltatime;
-                //RotateTransform3D rotateTransform = new RotateTransform3D();
-                //AxisAngleRotation3D axisAngleRotation = new AxisAngleRotation3D();
-                //axisAngleRotation.Axis = new System.Windows.Media.Media3D.Vector3D(0, 1, 0);
-                //axisAngleRotation.Angle = this.angle;
-                //rotateTransform.Rotation = axisAngleRotation;
 
-                //myPCamera.Transform = rotateTransform;
+                //this.gameObject.velocity += new Vector3D(0, 0.5 * deltatime, 0);
+                //this.gameObject.angle += 90 * deltatime;
+
                 //this.textBox.Text = $"Deltatime: {deltatime.ToString()}";
             }));
+        }
+
+        public void OnKeyDown(Key key)
+        {
+            if (key == Key.W)
+                this.gameObject.velocity = new Vector3D(0, 0, -4);
+            else if(key == Key.S)
+                this.gameObject.velocity = new Vector3D(0, 0, 4);
+            else if(key == Key.A)
+                this.gameObject.velocity = new Vector3D(-4, 0, 0);
+            else if(key == Key.D)
+                this.gameObject.velocity = new Vector3D(4, 0, 0);
+        }
+
+        public void OnKeyUp(Key key)
+        {
+            if (key == Key.W)
+                this.gameObject.velocity = new Vector3D(0, 0, -4);
+            else if(key == Key.S)
+                this.gameObject.velocity = new Vector3D(0, 0, 4);
+            else if(key == Key.A)
+                this.gameObject.velocity = new Vector3D(-4, 0, 0);
+            else if(key == Key.D)
+                this.gameObject.velocity = new Vector3D(4, 0, 0);
         }
     }
 }

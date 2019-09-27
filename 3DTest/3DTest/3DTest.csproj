@@ -35,8 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MLlib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="MLlib">
       <HintPath>..\..\MLlib\MLlib\bin\Debug\netstandard2.0\MLlib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
