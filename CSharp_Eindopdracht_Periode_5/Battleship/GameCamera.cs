@@ -36,10 +36,10 @@ namespace Battleship
 
             this.yaw = -90.0f;
             this.pitch = 0.0f;
-            this.speed = 2.5f;
+            this.speed = 5f;
             this.sensitivity = 0.1f;
 
-            this.constrainPitch = false;
+            this.constrainPitch = true;
             this.firstMouse = true;
 
             this.front = new Vector3D(0, 0, -1);

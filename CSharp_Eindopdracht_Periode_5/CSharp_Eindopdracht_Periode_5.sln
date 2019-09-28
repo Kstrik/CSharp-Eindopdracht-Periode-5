@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battleship", "Battleship\Battleship.csproj", "{6F5DC83D-F6F2-461A-8861-9A692F4E1662}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MLlib", "MLlib\MLlib.csproj", "{DBFDB884-31C6-4E29-8EE7-E61875F1BF2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLlib", "MLlib\MLlib.csproj", "{DBFDB884-31C6-4E29-8EE7-E61875F1BF2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Networking", "Networking\Networking.csproj", "{310E6CE0-7D20-48BE-998F-9A964628E366}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{DBFDB884-31C6-4E29-8EE7-E61875F1BF2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBFDB884-31C6-4E29-8EE7-E61875F1BF2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBFDB884-31C6-4E29-8EE7-E61875F1BF2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{310E6CE0-7D20-48BE-998F-9A964628E366}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{310E6CE0-7D20-48BE-998F-9A964628E366}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{310E6CE0-7D20-48BE-998F-9A964628E366}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{310E6CE0-7D20-48BE-998F-9A964628E366}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
