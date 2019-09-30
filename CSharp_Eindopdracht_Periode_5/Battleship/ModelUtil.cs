@@ -15,10 +15,11 @@ namespace Battleship
         public static GeometryModel3D ConvertToGeometryModel3D(Model model)
         {
             Point3DCollection vertices = new Point3DCollection();
-            foreach (MLlib.Vectors.Vector3D vertice in model.Vertices)
+            foreach (MLlib.Vectors.Vector3D vertice in model.Vertices) 
                 vertices.Add(new Point3D(vertice.X, vertice.Y, vertice.Z));
 
             Vector3DCollection normals = new Vector3DCollection();
+
             foreach (MLlib.Vectors.Vector3D normal in model.Normals)
                 normals.Add(new System.Windows.Media.Media3D.Vector3D(normal.X, normal.Y, normal.Z));
 
