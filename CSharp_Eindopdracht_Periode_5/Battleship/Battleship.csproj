@@ -108,6 +108,10 @@
       <Project>{dbfdb884-31c6-4e29-8ee7-e61875f1bf2d}</Project>
       <Name>MLlib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Networking\Networking.csproj">
+      <Project>{310e6ce0-7d20-48be-998f-9a964628e366}</Project>
+      <Name>Networking</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
