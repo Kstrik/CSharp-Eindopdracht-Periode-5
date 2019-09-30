@@ -49,7 +49,7 @@ namespace Networking.Server
                         this.server.DiconnectClient(this);
                     }
                     else
-                        this.receiver?.OnDataReceived(bytes, this);
+                        this.receiver?.OnDataReceived(bytes, this.Id);
                 }
             });
         }

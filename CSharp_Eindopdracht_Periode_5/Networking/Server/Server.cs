@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -113,12 +112,6 @@ namespace Networking.Server
         public void Transmit(byte[] data, string clientId)
         {
             ClientConnection connection = this.connections.Where(c => c.Id == clientId).First();
-            if (connection != null)
-                connection.Transmit(data);
-        }
-
-        public void Transmit(byte[] data, ClientConnection connection)
-        {
             if (connection != null)
                 connection.Transmit(data);
         }

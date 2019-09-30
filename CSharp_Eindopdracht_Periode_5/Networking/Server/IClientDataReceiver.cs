@@ -6,6 +6,6 @@ namespace Networking.Server
 {
     public interface IClientDataReceiver
     {
-        void OnDataReceived(byte[] data, ClientConnection connection);
+        void OnDataReceived(byte[] data, string clientId);
     }
 }

@@ -8,18 +8,15 @@ namespace Networking.Battleship
     {
         public enum ID
         {
-            REGISTER = 0x00,
             LOGIN = 0x01,
             LOGOUT = 0x02,
-
-            GET_SESSIONS = 0x03,
-            ADD_SESSION = 0x04,
+            ADD_SESSION = 0x03,
+            REMOVE_SESSION = 0x04,
             JOIN_SESSION = 0x05,
             LEAVE_SESSION = 0x06,
-
             READY = 0x07,
-            UNREADY = 0x09,
-            SUBMIT_MOVE = 0x09,
+            UNREADY = 0x08,
+            SUBMITMOVE = 0x09,
         }
 
         public enum State
@@ -72,21 +69,6 @@ namespace Networking.Battleship
             byte[] contentLength = new byte[] { bytes[2], bytes[3], bytes[4], bytes[5] };
             byte[] content = new List<byte>(bytes).GetRange(6, bytes.Length).ToArray();
             return new Message((ID)bytes[0], (State)bytes[1], contentLength, content);
-        }
-
-        public ID GetId()
-        {
-            return (ID)this.id;
-        }
-
-        public State GetState()
-        {
-            return (State)this.state;
-        }
-
-        public byte[] GetContent()
-        {
-            return this.content;
         }
     }
 }
