@@ -35,9 +35,11 @@ namespace Battleship.GameObjects
         public Vector3D Velocity;
         public Vector3D RotateAxis;
         public double Angle;
-        public Vector3D Scaling;
+        public Vector3D Scaling;
+
+        private Game game;
 
-        public GameObject()
+        public GameObject(Game game)
         {
             this.Position = new Vector3D(0, 0, 0);
             this.Velocity = new Vector3D(0, 0, 0);
@@ -51,9 +53,11 @@ namespace Battleship.GameObjects
             this.transform.Children.Add(this.translation);
             this.transform.Children.Add(this.rotation);
             this.transform.Children.Add(this.scale);
+
+            this.game = game;
         }
 
-        public void Update(float deltatime)
+        public virtual void Update(float deltatime)
         {
             this.Position += this.Velocity * deltatime;
 

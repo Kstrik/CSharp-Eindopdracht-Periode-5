@@ -28,7 +28,8 @@ namespace Battleship
         private Vector3D up;
         private Vector3D right;
 
-        public GameCamera()
+        public GameCamera(Game game)
+            : base(game)
         {
             this.camera = new PerspectiveCamera();
             this.camera.Position = new Point3D(0, 2, 10);

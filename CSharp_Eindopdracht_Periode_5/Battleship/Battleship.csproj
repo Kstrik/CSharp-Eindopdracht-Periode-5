@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="GameCamera.cs" />
     <Compile Include="GameInput.cs" />
+    <Compile Include="GameObjects\Water\Water.cs" />
     <Compile Include="Net\BattleshipClient.cs" />
     <Compile Include="World.cs" />
     <Page Include="MainWindow.xaml">
