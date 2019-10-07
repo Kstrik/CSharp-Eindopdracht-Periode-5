@@ -29,5 +29,10 @@ namespace Battleship.Net
         {
             this.client.Transmit(message.GetBytes());
         }
+
+        public void SetMessageReceiver(IServerMessageReceiver messageReceiver)
+        {
+            this.messageReceiver = messageReceiver;
+        }
     }
 }

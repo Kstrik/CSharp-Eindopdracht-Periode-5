@@ -5,8 +5,57 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Battleship"
         mc:Ignorable="d"
-        Title="GameBrowser" Height="450" Width="800" WindowStartupLocation="CenterScreen">
-    <Grid Background="#FF1E1E1E">
-        
+        Title="GameBrowser" Height="450" Width="800" WindowStartupLocation="CenterScreen" Background="#FF1E1E1E">
+    <Window.Resources>
+        <ControlTemplate x:Key="ButtonControlTemplate1" TargetType="{x:Type Button}">
+            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsDefaulted" Value="True">
+                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FF007ACC"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF007ACC"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FF007ACC"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF007ACC"/>
+                </Trigger>
+                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FFBCDDEE"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF007ACC"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" TargetName="border" Value="#FFF4F4F4"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FFADB2B5"/>
+                    <Setter Property="Foreground" Value="#FF838383"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
+    
+    <Grid Background="#FF1E1E1E" Margin="2,2,2,2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <local:Container Header="Lobbies" Grid.ColumnSpan="2" Background="#FF1E1E1E" Foreground="#FF2D2D30" HeaderForeground="White" FontSize="12" Margin="2,2,2,2">
+            <Grid Margin="5,5,5,5" Background="#FF2D2D30">
+                <Label Content="Kstrik" Foreground="White" Margin="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top"></Label>
+                <WrapPanel HorizontalAlignment="Right">
+                    <Button Content="Join" Width="50" Foreground="White" Background="#FF2D2D30" BorderBrush="Transparent" Template="{DynamicResource ButtonControlTemplate1}"></Button>
+                    <Label Content="Players: 2" Foreground="White" Margin="5,5,5,5"></Label>
+                </WrapPanel>
+            </Grid>
+        </local:Container>
+        <local:Container Header="Options" Grid.Column="2" Grid.ColumnSpan="1" Background="#FF1E1E1E" Foreground="#FF2D2D30" HeaderForeground="White" FontSize="12" Margin="2,2,2,2">
+
+        </local:Container>
     </Grid>
 </Window>
