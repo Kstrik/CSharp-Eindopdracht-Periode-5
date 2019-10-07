@@ -58,6 +58,9 @@
     <Compile Include="AuthorizationWindow.xaml.cs">
       <DependentUpon>AuthorizationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GameBrowser.xaml.cs">
+      <DependentUpon>GameBrowser.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GameCamera.cs" />
     <Compile Include="GameInput.cs" />
     <Compile Include="GameObjects\Water\Water.cs" />
@@ -65,6 +68,10 @@
     <Compile Include="Net\IServerMessageReceiver.cs" />
     <Compile Include="World.cs" />
     <Page Include="AuthorizationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GameBrowser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

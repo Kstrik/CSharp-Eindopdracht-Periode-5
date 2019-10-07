@@ -61,6 +61,11 @@ namespace Battleship
                 string usernameAndPasword = HashUtil.HashSha256(txb_LoginPassword.Password) + txb_LoginUsername.Text;
                 this.battleshipClient.Transmit(new Message(Message.ID.LOGIN, Message.State.NONE, Encoding.UTF8.GetBytes(usernameAndPasword)));
             }
+            else
+            {
+                lbl_LoginError.Content = "Input cannot be empty!";
+                lbl_LoginError.Visibility = Visibility.Visible;
+            }
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
@@ -77,8 +82,14 @@ namespace Battleship
                 }
                 else
                 {
-                    MessageBox.Show("Passwords do not match!");
+                    lbl_RegisterError.Content = "Passwords do not match!";
+                    lbl_RegisterError.Visibility = Visibility.Visible;
                 }
+            }
+            else
+            {
+                lbl_RegisterError.Content = "Input cannot be empty!";
+                lbl_RegisterError.Visibility = Visibility.Visible;
             }
         }
 
@@ -119,43 +130,54 @@ namespace Battleship
 
         public void OnMessageReceived(Message message)
         {
-            List<byte> content = new List<byte>(message.GetContent());
-
-            switch (message.GetId())
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
             {
-                case Message.ID.REGISTER:
-                    {
-                        Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+                List<byte> content = new List<byte>(message.GetContent());
+
+                switch (message.GetId())
+                {
+                    case Message.ID.REGISTER:
                         {
                             btn_Register.IsEnabled = true;
                             btn_Back.IsEnabled = true;
-                        }));
 
-                        if (message.GetState() == Message.State.OK)
-                            ScrollUp();
-                        else if (message.GetState() == Message.State.ERROR)
-                            MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
-                        break;
-                    }
-                case Message.ID.LOGIN:
-                    {
-                        Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+                            if (message.GetState() == Message.State.OK)
+                            {
+                                lbl_RegisterError.Visibility = Visibility.Hidden;
+                                ScrollUp();
+                            }
+                            else if (message.GetState() == Message.State.ERROR)
+                            {
+                                lbl_RegisterError.Content = Encoding.UTF8.GetString(content.ToArray());
+                                lbl_RegisterError.Visibility = Visibility.Visible;
+                            }
+                            break;
+                        }
+                    case Message.ID.LOGIN:
                         {
                             btn_Login.IsEnabled = true;
                             btn_ShowRegister.IsEnabled = true;
-                        }));
 
-                        if (message.GetState() == Message.State.OK)
-                            MessageBox.Show("Login succesful!");
-                        else if (message.GetState() == Message.State.ERROR)
-                            MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
-                        break;
-                    }
-                default:
-                    {
-                        break;
-                    }
-            }
+                            if (message.GetState() == Message.State.OK)
+                            {
+                                lbl_LoginError.Visibility = Visibility.Hidden;
+                                GameBrowser gameBrowser = new GameBrowser();
+                                gameBrowser.Show();
+                                this.Close();
+                            }
+                            else if (message.GetState() == Message.State.ERROR)
+                            {
+                                lbl_LoginError.Content = Encoding.UTF8.GetString(content.ToArray());
+                                lbl_LoginError.Visibility = Visibility.Visible;
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
+            }));
         }
     }
 }
