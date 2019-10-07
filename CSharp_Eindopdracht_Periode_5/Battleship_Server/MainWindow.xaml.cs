@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Battleship_Server.Net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,15 @@ namespace Battleship_Server
     /// </summary>
     public partial class MainWindow : Window
     {
+        private BattleshipServer battleshipServer;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            this.battleshipServer = new BattleshipServer("127.0.0.1", 1551);
         }
+
+
     }
 }

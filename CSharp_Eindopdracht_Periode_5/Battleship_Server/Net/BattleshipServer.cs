@@ -18,6 +18,7 @@ namespace Battleship_Server.Net
         public BattleshipServer(string ip, int port)
         {
             this.server = new Server(ip, port, this, this, null);
+            this.server.Start();
 
             this.sessions = new List<Session>();
             this.players = new List<Player>();
@@ -46,8 +47,8 @@ namespace Battleship_Server.Net
             {
                 case Message.ID.REGISTER:
                     {
-                        string username = content.GetRange(0, 20).ToString();
-                        string password = content.GetRange(20, 20).ToString();
+                        string username = Encoding.UTF8.GetString(content.GetRange(64, content.Count - 64).ToArray());
+                        string password = Encoding.UTF8.GetString(content.GetRange(0, 64).ToArray());
                         bool result = player.Register(username, password);
                         if (result)
                             this.server.Transmit(new Message(Message.ID.REGISTER, Message.State.OK, null).GetBytes(), connection);
@@ -57,8 +58,8 @@ namespace Battleship_Server.Net
                     }
                 case Message.ID.LOGIN:
                     {
-                        string username = content.GetRange(0, 20).ToString();
-                        string password = content.GetRange(20, 20).ToString();
+                        string username = Encoding.UTF8.GetString(content.GetRange(64, content.Count - 64).ToArray());
+                        string password = Encoding.UTF8.GetString(content.GetRange(0, 64).ToArray());
                         bool result = player.Login(username, password);
                         if (result)
                             this.server.Transmit(new Message(Message.ID.LOGIN, Message.State.OK, null).GetBytes(), connection);

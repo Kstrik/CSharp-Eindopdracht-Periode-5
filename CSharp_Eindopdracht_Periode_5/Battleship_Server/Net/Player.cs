@@ -25,13 +25,12 @@ namespace Battleship_Server.Net
 
         public bool Register(string username, string password)
         {
-            string hashedPasword = HashUtil.HashSha256(password);
-            return Authorizer.AddNewAuthorization(username, hashedPasword);
+            return Authorizer.AddNewAuthorization(username, password);
         }
 
         public bool Login(string username, string password)
         {
-            if(Authorizer.CheckAuthorization(username, HashUtil.HashSha256(password)))
+            if(Authorizer.CheckAuthorization(username, password))
             {
                 this.username = username;
                 return true;

@@ -39,6 +39,9 @@ namespace Networking.Battleship
             this.id = (byte)id;
             this.state = (byte)state;
 
+            if (content == null)
+                content = new byte[0];
+
             this.contentLength = new byte[4];
             contentLength[0] = (byte)content.Length;
             contentLength[1] = (byte)(content.Length >> 8);
@@ -70,7 +73,7 @@ namespace Networking.Battleship
         public static Message ParseMessage(byte[] bytes)
         {
             byte[] contentLength = new byte[] { bytes[2], bytes[3], bytes[4], bytes[5] };
-            byte[] content = new List<byte>(bytes).GetRange(6, bytes.Length).ToArray();
+            byte[] content = new List<byte>(bytes).GetRange(6, bytes.Length - 6).ToArray();
             return new Message((ID)bytes[0], (State)bytes[1], contentLength, content);
         }
 
