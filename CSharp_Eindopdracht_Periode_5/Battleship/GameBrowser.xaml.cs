@@ -30,8 +30,6 @@ namespace Battleship
 
             this.battleshipClient = battleshipClient;
             this.battleshipClient.SetMessageReceiver(this);
-
-            this.Closing += GameBrowser_Closing;
         }
 
         public void OnMessageReceived(Message message)
@@ -159,11 +157,6 @@ namespace Battleship
         private void ShowLobby(string sessionName)
         {
             MessageBox.Show(sessionName);
-        }
-
-        private void GameBrowser_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            Environment.Exit(0);
         }
     }
 }

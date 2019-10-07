@@ -47,8 +47,6 @@ namespace Battleship
             this.storyBoard = new Storyboard();
             this.storyBoard.Children.Add(this.slideAnimation);
             this.isRegistering = false;
-
-            this.Closing += AuthorizationWindow_Closing;
         }
 
         public AuthorizationWindow()
@@ -186,11 +184,6 @@ namespace Battleship
                         }
                 }
             }));
-        }
-
-        private void AuthorizationWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            Environment.Exit(0);
         }
     }
 }

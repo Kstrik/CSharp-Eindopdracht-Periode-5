@@ -118,5 +118,10 @@ namespace Battleship.GameLogic
         {
             this.mainDispatcher.Invoke(DispatcherPriority.Background, action);
         }
+
+        public World GetWorld()
+        {
+            return this.world;
+        }
     }
 }

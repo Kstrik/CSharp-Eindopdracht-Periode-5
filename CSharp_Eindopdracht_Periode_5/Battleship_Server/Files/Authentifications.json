@@ -1,10 +1,6 @@
 {
   "authentifications": [
     {
-      "username": "Kstrik",
-      "password": "d8fe034c4001032319d6820fa66954ecec9b0a7ddd4f7cb8e02193d4fd457ca3"
-    },
-    {
       "username": "Test",
       "password": "37268335dd6931045bdcdf92623ff819a64244b53d0e746d438797349d4da578"
     },
