@@ -35,8 +35,10 @@ namespace Battleship.GameObjects
         public Vector3D Velocity;
         public Vector3D RotateAxis;
         public double Angle;
-        public Vector3D Scaling;
-
+        public Vector3D Scaling;
+
+
+
         private Game game;
 
         public GameObject(Game game)
@@ -107,6 +109,10 @@ namespace Battleship.GameObjects
                     this.geometryModel.BackMaterial = this.material;
                 }
             }
+        }
+        public Vector3D GetPosition()
+        {
+            return this.Position;
         }
     }
 }

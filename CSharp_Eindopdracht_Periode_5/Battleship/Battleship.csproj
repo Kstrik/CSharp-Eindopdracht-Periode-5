@@ -64,6 +64,7 @@
     </Compile>
     <Compile Include="GameCamera.cs" />
     <Compile Include="GameInput.cs" />
+    <Compile Include="GameObjects\Grid.cs" />
     <Compile Include="GameObjects\Water\Water.cs" />
     <Compile Include="Net\BattleshipClient.cs" />
     <Compile Include="Net\IServerMessageReceiver.cs" />
