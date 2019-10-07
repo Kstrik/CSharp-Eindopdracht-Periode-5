@@ -62,8 +62,9 @@
     <Compile Include="GameBrowser.xaml.cs">
       <DependentUpon>GameBrowser.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GameLogic\GameCamera.cs" />
-    <Compile Include="GameLogic\GameInput.cs" />
+    <Compile Include="GameCamera.cs" />
+    <Compile Include="GameInput.cs" />
+    <Compile Include="GameObjects\Grid.cs" />
     <Compile Include="GameObjects\Water\Water.cs" />
     <Compile Include="LobbyWindow.xaml.cs">
       <DependentUpon>LobbyWindow.xaml</DependentUpon>

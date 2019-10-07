@@ -108,5 +108,9 @@ namespace Battleship.GameObjects
                 }
             }
         }
+        public Vector3D GetPosition()
+        {
+            return this.Position;
+        }
     }
 }
