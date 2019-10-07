@@ -31,11 +31,14 @@ namespace Battleship
 
         private bool isRegistering;
 
-        public AuthorizationWindow()
+        public AuthorizationWindow(BattleshipClient battleshipClient)
         {
             InitializeComponent();
 
-            this.battleshipClient = new BattleshipClient("127.0.0.1", 1551, this);
+            if (this.battleshipClient == null)
+                this.battleshipClient = new BattleshipClient("127.0.0.1", 1551, this);
+            else
+                this.battleshipClient.SetMessageReceiver(this);
 
             this.slideAnimation = new ThicknessAnimation();
             this.slideAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(500));
@@ -44,7 +47,12 @@ namespace Battleship
             this.storyBoard = new Storyboard();
             this.storyBoard.Children.Add(this.slideAnimation);
             this.isRegistering = false;
+
+            this.Closing += AuthorizationWindow_Closing;
         }
+
+        public AuthorizationWindow()
+            : this(null) { }
 
         private void ShowRegister_Click(object sender, RoutedEventArgs e)
         {
@@ -161,7 +169,7 @@ namespace Battleship
                             if (message.GetState() == Message.State.OK)
                             {
                                 lbl_LoginError.Visibility = Visibility.Hidden;
-                                GameBrowser gameBrowser = new GameBrowser();
+                                GameBrowser gameBrowser = new GameBrowser(this.battleshipClient);
                                 gameBrowser.Show();
                                 this.Close();
                             }
@@ -178,6 +186,11 @@ namespace Battleship
                         }
                 }
             }));
+        }
+
+        private void AuthorizationWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

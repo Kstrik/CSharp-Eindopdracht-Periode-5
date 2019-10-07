@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
 
-namespace Battleship
+namespace Battleship.GameLogic
 {
     public class GameCamera : GameObject
     {

@@ -122,5 +122,11 @@ namespace Networking.Server
             if (connection != null)
                 connection.Transmit(data);
         }
+
+        public void Broadcast(byte[] data)
+        {
+            foreach(ClientConnection connection in this.connections)
+                connection.Transmit(data);
+        }
     }
 }

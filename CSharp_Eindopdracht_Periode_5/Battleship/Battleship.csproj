@@ -62,17 +62,27 @@
     <Compile Include="GameBrowser.xaml.cs">
       <DependentUpon>GameBrowser.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GameCamera.cs" />
-    <Compile Include="GameInput.cs" />
+    <Compile Include="GameLogic\GameCamera.cs" />
+    <Compile Include="GameLogic\GameInput.cs" />
     <Compile Include="GameObjects\Water\Water.cs" />
+    <Compile Include="LobbyWindow.xaml.cs">
+      <DependentUpon>LobbyWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Net\BattleshipClient.cs" />
     <Compile Include="Net\IServerMessageReceiver.cs" />
-    <Compile Include="World.cs" />
+    <Compile Include="SessionListItem.xaml.cs">
+      <DependentUpon>SessionListItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GameLogic\World.cs" />
     <Page Include="AuthorizationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GameBrowser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LobbyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -85,13 +95,17 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ModelUtil.cs" />
-    <Compile Include="Timing.cs" />
-    <Compile Include="Game.cs" />
+    <Compile Include="GameLogic\Timing.cs" />
+    <Compile Include="GameLogic\Game.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SessionListItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

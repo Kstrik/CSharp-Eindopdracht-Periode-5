@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Battleship.GameLogic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,7 +37,6 @@ namespace Battleship.GameObjects
         public Vector3D RotateAxis;
         public double Angle;
         public Vector3D Scaling;
-
         private Game game;
 
         public GameObject(Game game)
