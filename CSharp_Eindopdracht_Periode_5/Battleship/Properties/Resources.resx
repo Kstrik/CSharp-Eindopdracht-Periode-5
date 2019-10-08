@@ -136,7 +136,13 @@
   <data name="GridPlane" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\GridPlane.obj;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="GridPlane1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\GridPlane.obj;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="Highlighter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Assets\Highlighter.obj;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Highlighter1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Assets\Highlighter.obj;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Sub" type="System.Resources.ResXFileRef, System.Windows.Forms">

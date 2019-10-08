@@ -23,6 +23,7 @@ namespace Battleship
     {
         private Viewport3D viewport;
         private Game game;
+        //Battleship.GameObjects.Grid grid; 
 
         public MainWindow()
         {
@@ -38,6 +39,10 @@ namespace Battleship
             this.MouseDown += MainWindow_MouseDown;
             this.MouseUp += MainWindow_MouseUp;
             this.MouseMove += MainWindow_MouseMove;
+            //grid = new Battleship.GameObjects.Grid(this.game);
+
+
+
 
             //this.Cursor = Cursors.None;
         }

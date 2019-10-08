@@ -123,9 +123,29 @@ namespace Battleship.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] GridPlane1 {
+            get {
+                object obj = ResourceManager.GetObject("GridPlane1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] Highlighter {
             get {
                 object obj = ResourceManager.GetObject("Highlighter", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Highlighter1 {
+            get {
+                object obj = ResourceManager.GetObject("Highlighter1", resourceCulture);
                 return ((byte[])(obj));
             }
         }
