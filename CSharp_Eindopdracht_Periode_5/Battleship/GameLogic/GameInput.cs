@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Battleship
+namespace Battleship.GameLogic
 {
     public delegate void KeyDownEventHandler(Key key);
     public delegate void KeyUpEventHandler(Key key);

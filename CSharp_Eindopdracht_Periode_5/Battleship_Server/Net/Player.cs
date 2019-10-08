@@ -13,6 +13,7 @@ namespace Battleship_Server.Net
         private ClientConnection clientConnection;
 
         private string username;
+        public Session Session { get; set; }
 
         public bool IsAuthorized { get { return this.isAuthorized; } }
         private bool isAuthorized;
@@ -33,6 +34,7 @@ namespace Battleship_Server.Net
             if(Authorizer.CheckAuthorization(username, password))
             {
                 this.username = username;
+                this.isAuthorized = true;
                 return true;
             }
             return false;

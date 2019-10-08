@@ -1,4 +1,5 @@
-﻿using MLlib;
+﻿using Battleship.GameLogic;
+using MLlib;
 using System;
 using System.Collections.Generic;
 using System.Linq;

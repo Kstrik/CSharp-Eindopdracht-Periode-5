@@ -13,13 +13,15 @@ namespace Networking.Battleship
             LOGOUT = 0x02,
 
             GET_SESSIONS = 0x03,
-            ADD_SESSION = 0x04,
-            JOIN_SESSION = 0x05,
-            LEAVE_SESSION = 0x06,
+            SESSIONDATA = 0x04,
+            ADD_SESSION = 0x05,
+            REMOVE_SESSION = 0x06,
+            JOIN_SESSION = 0x07,
+            LEAVE_SESSION = 0x08,
 
-            READY = 0x07,
-            UNREADY = 0x09,
-            SUBMIT_MOVE = 0x09,
+            READY = 0x09,
+            UNREADY = 0xA,
+            SUBMIT_MOVE = 0xB,
         }
 
         public enum State

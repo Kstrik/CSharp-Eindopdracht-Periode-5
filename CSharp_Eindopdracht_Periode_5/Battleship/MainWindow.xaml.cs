@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Battleship.GameLogic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,15 +21,15 @@ namespace Battleship
     /// </summary>
     public partial class MainWindow : Window
     {
-        //private Viewport3D viewport;
+        private Viewport3D viewport;
         private Game game;
 
         public MainWindow()
         {
             InitializeComponent();
-            //this.viewport = new Viewport3D();
-            //this.Content = this.viewport;
-            this.game = new Game(Application.Current.Dispatcher, ref vwp);
+            this.viewport = new Viewport3D();
+            this.Content = this.viewport;
+            this.game = new Game(Application.Current.Dispatcher, ref this.viewport);
 
             this.Closing += MainWindow_Closing;
             this.game.Start();
@@ -52,33 +53,18 @@ namespace Battleship
 
         private void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            GameInput.OnMouseDown(e.ChangedButton, e.GetPosition(vwp));
+            GameInput.OnMouseDown(e.ChangedButton, e.GetPosition(this.viewport));
         }
 
         private void MainWindow_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            GameInput.OnMouseUp(e.ChangedButton, e.GetPosition(this.vwp));
+            GameInput.OnMouseUp(e.ChangedButton, e.GetPosition(this.viewport));
         }
 
         private void MainWindow_MouseMove(object sender, MouseEventArgs e)
         {
             if(e.MiddleButton == MouseButtonState.Pressed)
-                GameInput.OnMouseMove(e.GetPosition(vwp));
-        }
-
-        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            this.game.Stop();
-        }
-
-        private void StartGame_Click(object sender, RoutedEventArgs e)
-        {
-            this.game.Start();
-        }
-
-        private void StopGame_Click(object sender, RoutedEventArgs e)
-        {
-            this.game.Stop();
+                GameInput.OnMouseMove(e.GetPosition(this.viewport));
         }
 
         private void Ship_MouseDown(object sender, MouseButtonEventArgs e)
@@ -103,6 +89,23 @@ namespace Battleship
                 default:
                     break;
             }
+        }
+    }
+}
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.game.Stop();
+        }
+
+        private void StartGame_Click(object sender, RoutedEventArgs e)
+        {
+            this.game.Start();
+        }
+
+        private void StopGame_Click(object sender, RoutedEventArgs e)
+        {
+            this.game.Stop();
         }
     }
 }

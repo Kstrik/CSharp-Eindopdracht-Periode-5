@@ -31,11 +31,14 @@ namespace Battleship
 
         private bool isRegistering;
 
-        public AuthorizationWindow()
+        public AuthorizationWindow(BattleshipClient battleshipClient)
         {
             InitializeComponent();
 
-            this.battleshipClient = new BattleshipClient("127.0.0.1", 1551, this);
+            if (this.battleshipClient == null)
+                this.battleshipClient = new BattleshipClient("127.0.0.1", 1551, this);
+            else
+                this.battleshipClient.SetMessageReceiver(this);
 
             this.slideAnimation = new ThicknessAnimation();
             this.slideAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(500));
@@ -45,6 +48,9 @@ namespace Battleship
             this.storyBoard.Children.Add(this.slideAnimation);
             this.isRegistering = false;
         }
+
+        public AuthorizationWindow()
+            : this(null) { }
 
         private void ShowRegister_Click(object sender, RoutedEventArgs e)
         {
