@@ -130,5 +130,13 @@
       <Name>Networking</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Assets\Battleship.png" />
+    <Resource Include="Assets\Carrier.png" />
+    <Resource Include="Assets\Cruiser.png" />
+    <Resource Include="Assets\Destroyer.png" />
+    <Resource Include="Assets\Sub.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

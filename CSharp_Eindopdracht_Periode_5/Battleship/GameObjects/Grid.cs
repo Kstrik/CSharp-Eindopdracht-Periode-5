@@ -25,7 +25,7 @@ namespace Battleship.GameObjects
             marker.Scaling = new Vector3D(1, 1, 1);
             marker.Position = new Vector3D(-4.5, 0,-4.5);
             marker.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Levi Vlasblom\Desktop\Highlighter.obj"));
-            marker.Material = new DiffuseMaterial(Brushes.Red);
+            marker.Material = new DiffuseMaterial(Brushes.AliceBlue);
             game.GetWorld().AddGameObject(marker);
             
             GameInput.KeyUp += UpdatePlayerMark;

@@ -20,15 +20,15 @@ namespace Battleship
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Viewport3D viewport;
+        //private Viewport3D viewport;
         private Game game;
 
         public MainWindow()
         {
             InitializeComponent();
-            this.viewport = new Viewport3D();
-            this.Content = this.viewport;
-            this.game = new Game(Application.Current.Dispatcher, ref this.viewport);
+            //this.viewport = new Viewport3D();
+            //this.Content = this.viewport;
+            this.game = new Game(Application.Current.Dispatcher, ref vwp);
 
             this.Closing += MainWindow_Closing;
             this.game.Start();
@@ -52,18 +52,18 @@ namespace Battleship
 
         private void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            GameInput.OnMouseDown(e.ChangedButton, e.GetPosition(this.viewport));
+            GameInput.OnMouseDown(e.ChangedButton, e.GetPosition(vwp));
         }
 
         private void MainWindow_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            GameInput.OnMouseUp(e.ChangedButton, e.GetPosition(this.viewport));
+            GameInput.OnMouseUp(e.ChangedButton, e.GetPosition(this.vwp));
         }
 
         private void MainWindow_MouseMove(object sender, MouseEventArgs e)
         {
             if(e.MiddleButton == MouseButtonState.Pressed)
-                GameInput.OnMouseMove(e.GetPosition(this.viewport));
+                GameInput.OnMouseMove(e.GetPosition(vwp));
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -79,6 +79,30 @@ namespace Battleship
         private void StopGame_Click(object sender, RoutedEventArgs e)
         {
             this.game.Stop();
+        }
+
+        private void Ship_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            switch ((sender as Image).Name)
+            {
+                case "Carrier":
+
+                    break;
+                case "Cruiser":
+
+                    break;
+                case "Battleship":
+
+                    break;
+                case "Submarine":
+
+                    break;
+                case "Destroyer":
+
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
