@@ -53,11 +53,19 @@ namespace Battleship.GameLogic
             //gameObject1.Material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\gencar_blue.png", UriKind.Absolute))));
             //this.world.AddGameObject(gameObject1);
 
-            GameObject gameObject2 = new GameObject(this);
-            gameObject2.Position = new Vector3D(0, 0, 0);
-            gameObject2.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Kenley Strik\Desktop\cars.obj"));
-            gameObject2.Material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\gencar_blue.png", UriKind.Absolute))));
-            this.world.AddGameObject(gameObject2);
+            //GameObject gameObject2 = new GameObject(this);
+            //gameObject2.Position = new Vector3D(0, 0, 0);
+            //gameObject2.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Kenley Strik\Desktop\cars.obj"));
+            //gameObject2.Material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\gencar_blue.png", UriKind.Absolute))));
+            //this.world.AddGameObject(gameObject2);
+
+            GameObjects.Grid playerGrid = new GameObjects.Grid(this);
+            playerGrid.Position = new Vector3D(-10, 0, 0);
+            this.world.AddGameObject(playerGrid);
+
+            GameObjects.Grid enemyGrid = new GameObjects.Grid(this);
+            playerGrid.Position = new Vector3D(10, 0, 0);
+            this.world.AddGameObject(enemyGrid);
 
             //Water water = new Water(this);
             //this.world.AddGameObject(water);

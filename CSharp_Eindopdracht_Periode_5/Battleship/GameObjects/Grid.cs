@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -15,6 +16,7 @@ namespace Battleship.GameObjects
     class Grid : GameObject
     {
         GameObject marker;
+        Point index = new Point(0, 0);
         public Grid(Game game)
             : base(game)
         {
@@ -26,7 +28,7 @@ namespace Battleship.GameObjects
             marker.Scaling = new Vector3D(1, 1, 1);
             marker.Position = new Vector3D(-4.5, 0,-4.5);
             marker.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Levi Vlasblom\Desktop\Highlighter.obj"));
-            marker.Material = new DiffuseMaterial(Brushes.AliceBlue);
+            marker.Material = new DiffuseMaterial(Brushes.Blue);
             game.GetWorld().AddGameObject(marker);
             
             GameInput.KeyUp += UpdatePlayerMark;
