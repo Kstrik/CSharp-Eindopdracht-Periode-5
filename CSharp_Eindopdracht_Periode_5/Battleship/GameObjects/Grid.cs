@@ -2,7 +2,9 @@
 using MLlib;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,19 +17,27 @@ namespace Battleship.GameObjects
 {
     class Grid : GameObject
     {
+        private static string appFolderPath = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+        private static string filesFolderPath = System.IO.Path.Combine(Directory.GetParent(appFolderPath).Parent.FullName, "Assets");
+
         GameObject marker;
         Point index = new Point(0, 0);
         public Grid(Game game)
             : base(game)
         {
+            //string test = Battleship.Properties.Resources.GridPlane.ToString();
+            //var path = Path.GetTempPath();
+
+           
+
             Position = new Vector3D(0, 0, 0);
-            GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Levi Vlasblom\Desktop\GridPlane.obj"));
-            Material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(@"C:\Users\Levi Vlasblom\Desktop\gird.png", UriKind.Absolute))));
+            GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(filesFolderPath + @"\GridPlane.obj"));
+            Material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(filesFolderPath + @"\gird.png", UriKind.Absolute))));
 
             marker = new GameObject(game);
             marker.Scaling = new Vector3D(1, 1, 1);
             marker.Position = new Vector3D(-4.5, 0,-4.5);
-            marker.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Levi Vlasblom\Desktop\Highlighter.obj"));
+            marker.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(filesFolderPath + @"\Highlighter.obj"));
             marker.Material = new DiffuseMaterial(Brushes.Blue);
             game.GetWorld().AddGameObject(marker);
             
