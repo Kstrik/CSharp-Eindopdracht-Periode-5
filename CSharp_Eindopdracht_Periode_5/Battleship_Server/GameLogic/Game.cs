@@ -47,7 +47,7 @@ namespace Battleship_Server.GameLogic
 
                     if(enemyPlayer.HitPoints == 0)
                     {
-                        this.session.Broadcast(new Message(Message.ID.END_GAME, Message.State.OK, Encoding.UTF8.GetBytes(gamePlayer.Player.GetUsername())));
+                        this.session.Broadcast(new Message(Message.ID.END_GAME, Message.State.OK, Encoding.UTF8.GetBytes(gamePlayer.Player.GetUsername() + " won the game!")));
                         return false;
                     }
                 }
@@ -94,6 +94,15 @@ namespace Battleship_Server.GameLogic
         public GameState GetState()
         {
             return this.state;
+        }
+
+        public string GetEndGameText()
+        {
+            if (players[0].HitPoints < players[1].HitPoints)
+                return players[0].Player.GetUsername() + " won the game!";
+            else if(players[0].HitPoints == players[1].HitPoints)
+                return "The game was tied!";
+            return players[1].Player.GetUsername() + " won the game!";
         }
     }
 }

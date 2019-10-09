@@ -95,10 +95,7 @@ namespace Battleship_Server.Net
                     }
                 case Message.ID.READY:
                     {
-                        if (this.game != null)
-                            this.game.HandleMessage(message, player);
-
-                        if (player.IsAuthorized)
+                        if (player.IsAuthorized && this.game == null)
                         {
                             player.IsReady = true;
                             this.battleshipServer.Transmit(new Message(Message.ID.READY, Message.State.OK, null), player.GetConnection());
@@ -107,10 +104,7 @@ namespace Battleship_Server.Net
                     }
                 case Message.ID.UNREADY:
                     {
-                        if (this.game != null)
-                            this.game.HandleMessage(message, player);
-
-                        if (player.IsAuthorized)
+                        if (player.IsAuthorized && this.game == null)
                         {
                             player.IsReady = false;
                             this.battleshipServer.Transmit(new Message(Message.ID.UNREADY, Message.State.OK, null), player.GetConnection());
@@ -130,8 +124,8 @@ namespace Battleship_Server.Net
                     {
                         if (player.IsAuthorized && this.game != null)
                         {
+                            Broadcast(new Message(Message.ID.END_GAME, Message.State.OK, Encoding.UTF8.GetBytes(this.game.GetEndGameText())));
                             this.game = null;
-                            Broadcast(new Message(Message.ID.END_GAME, Message.State.OK, content.ToArray()));
                         }
                         break;
                     }
