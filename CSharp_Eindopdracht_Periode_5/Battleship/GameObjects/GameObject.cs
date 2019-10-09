@@ -72,7 +72,7 @@ namespace Battleship.GameObjects
             this.transform.Children.Clear();
             this.translation = new TranslateTransform3D(this.Position);
             this.axisAngle = new AxisAngleRotation3D(this.RotateAxis, this.Angle);
-            this.rotation = new RotateTransform3D(this.axisAngle);
+            this.rotation = new RotateTransform3D(this.axisAngle, new Point3D(this.Position.X, this.Position.Y, this.Position.Z));
             this.scale = new ScaleTransform3D(this.Scaling);
 
             this.transform.Children.Add(this.translation);

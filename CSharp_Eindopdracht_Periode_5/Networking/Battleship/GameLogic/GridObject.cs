@@ -17,11 +17,21 @@ namespace Networking.Battleship.GameLogic
             this.originIndexY = originIndexY;
             this.directionX = 0;
             this.directionY = 1;
-            this.frontSize = size / 2;
-            this.backSize = size / 2;
+            SetSize(size);
+        }
 
-            if (size % 2 == 0)
-                this.backSize--;
+        public void RotateRight()
+        {
+            int tempX = this.directionX;
+            this.directionX = -this.directionY;
+            this.directionY = tempX;
+        }
+
+        public void RotateLeft()
+        {
+            int tempX = this.directionX;
+            this.directionX = this.directionY;
+            this.directionY = -tempX;
         }
 
         public Tuple<int, int> GetIndexFront()
@@ -36,6 +46,21 @@ namespace Networking.Battleship.GameLogic
             int backX = (-(int)this.directionX * this.frontSize) + originIndexX;
             int backY = (-(int)this.directionY * this.frontSize) + originIndexY;
             return new Tuple<int, int>(backX, backY);
+        }
+
+        public void SetOriginIndex(int originIndexX, int originIndexY)
+        {
+            this.originIndexX = originIndexX;
+            this.originIndexY = originIndexY;
+        }
+
+        public void SetSize(int size)
+        {
+            this.frontSize = size / 2;
+            this.backSize = size / 2;
+
+            if (size % 2 == 0)
+                this.backSize--;
         }
     }
 }

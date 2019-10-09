@@ -1,4 +1,5 @@
-﻿using Battleship.GameLogic;
+﻿using Battleship.Assets;
+using Battleship.GameLogic;
 using MLlib;
 using MLlib.Vectors;
 using System;
@@ -35,8 +36,8 @@ namespace Battleship.GameObjects.Water
             this.waveB = new Vector4D(0.0f, 1.0f, 0.12f, 2.5f);
             this.waveC = new Vector4D(0.5f, 1.0f, 0.12f, 1f);
 
-            this.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Kenley Strik\Desktop\GridPlane.obj"));
-            this.Material = new System.Windows.Media.Media3D.DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\1.jpg", UriKind.Absolute))));
+            this.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.WaterTileModel));
+            this.Material = new System.Windows.Media.Media3D.DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(Asset.WaterImage, UriKind.Absolute))));
 
             this.orignalPositions = new System.Windows.Media.Media3D.Point3DCollection();
             this.orignalNormals = new System.Windows.Media.Media3D.Vector3DCollection();

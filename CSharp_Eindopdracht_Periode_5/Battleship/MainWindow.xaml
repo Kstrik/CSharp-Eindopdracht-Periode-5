@@ -15,16 +15,16 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="0" Grid.Row="0"  Background="#FF655C5C" >
             <Label Content="Carrier"></Label>
-            <Image Height="60" Name="carrier" Source="Assets/Carrier.png" MouseDown="Ship_MouseDown">
+            <Image Height="60" Name="carrier" Source="Assets/Images/Carrier.png" MouseDown="Ship_MouseDown">
             </Image>
             <Label Content="Cruiser"></Label>
-            <Image Height="60" Name="cruiser" Source="Assets/Cruiser.png" MouseDown="Ship_MouseDown"/>
+            <Image Height="60" Name="cruiser" Source="Assets/Images/Cruiser.png" MouseDown="Ship_MouseDown"/>
             <Label Content="Battleship"></Label>
-            <Image Height="60" Name="battleship" Source="Assets/Battleship.png" MouseDown="Ship_MouseDown"/>
+            <Image Height="60" Name="battleship" Source="Assets/Images/Battleship.png" MouseDown="Ship_MouseDown"/>
             <Label Content="Submarine"></Label>
-            <Image Height="60" Name="submarine" Source="Assets/Sub.png" MouseDown="Ship_MouseDown"/>
+            <Image Height="60" Name="submarine" Source="Assets/Images/Sub.png" MouseDown="Ship_MouseDown"/>
             <Label Content="Destroyer"></Label>
-            <Image Height="60" Name="destroyer" Source="Assets/Destroyer.png" MouseDown="Ship_MouseDown"/>
+            <Image Height="60" Name="destroyer" Source="Assets/Images/Destroyer.png" MouseDown="Ship_MouseDown"/>
         </StackPanel>
         <Viewport3D Name="vwp" Grid.Column="1" Grid.Row="0"></Viewport3D>
     </Grid>

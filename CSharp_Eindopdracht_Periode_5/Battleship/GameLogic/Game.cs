@@ -1,4 +1,5 @@
-﻿using Battleship.GameObjects;
+﻿using Battleship.Assets;
+using Battleship.GameObjects;
 using Battleship.GameObjects.Water;
 using MLlib;
 using System;
@@ -47,24 +48,22 @@ namespace Battleship.GameLogic
             myDirectionalLight.Direction = new System.Windows.Media.Media3D.Vector3D(0, -1, -1);
             this.world.AddLight(myDirectionalLight);
 
-            //GameObject gameObject1 = new GameObject(this);
-            //gameObject1.Position = new Vector3D(1, 0, 0);
-            //gameObject1.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Kenley Strik\Desktop\cars.obj"));
-            //gameObject1.Material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\gencar_blue.png", UriKind.Absolute))));
-            //this.world.AddGameObject(gameObject1);
+            GameObject gameObject = new GameObject(this);
+            gameObject.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.AircraftCarrierModel));
+            gameObject.Material = new DiffuseMaterial(Brushes.Blue);
+            this.world.AddGameObject(gameObject);
 
-            //GameObject gameObject2 = new GameObject(this);
-            //gameObject2.Position = new Vector3D(0, 0, 0);
-            //gameObject2.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Kenley Strik\Desktop\cars.obj"));
-            //gameObject2.Material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\gencar_blue.png", UriKind.Absolute))));
-            //this.world.AddGameObject(gameObject2);
-
-            GameObjects.Grid playerGrid = new GameObjects.Grid(this);
-            playerGrid.Position = new Vector3D(-10, 0, 0);
+            SelectionGrid playerGrid = new SelectionGrid(this, true);
+            playerGrid.Position = new Vector3D(-5.5, 0, 0);
+            playerGrid.Marker.Position = new Vector3D(playerGrid.Position.X - 4.5, playerGrid.Position.Y, playerGrid.Position.Z - 4.5);
+            playerGrid.Ship = gameObject;
+            this.world.AddGameObject(playerGrid.Marker);
             this.world.AddGameObject(playerGrid);
 
-            GameObjects.Grid enemyGrid = new GameObjects.Grid(this);
-            playerGrid.Position = new Vector3D(10, 0, 0);
+            SelectionGrid enemyGrid = new SelectionGrid(this, false);
+            enemyGrid.Position = new Vector3D(5.5, 0, 0);
+            enemyGrid.Marker.Position = new Vector3D(enemyGrid.Position.X - 4.5, enemyGrid.Position.Y, enemyGrid.Position.Z - 4.5);
+            this.world.AddGameObject(enemyGrid.Marker);
             this.world.AddGameObject(enemyGrid);
 
             //Water water = new Water(this);

@@ -35,8 +35,6 @@ namespace Battleship
         {
             InitializeComponent();
 
-            //Networking.Battleship.GameLogic.GridObject test = new Networking.Battleship.GameLogic.GridObject(2);
-
             if (this.battleshipClient == null)
                 this.battleshipClient = new BattleshipClient("127.0.0.1", 1551, this);
             else

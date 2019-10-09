@@ -18,6 +18,13 @@ namespace Networking.Battleship.GameLogic
         public BattleshipGrid(double nodeSize, int sizeX, int sizeY, Point3D origin)
         {
             this.nodes = new Node[sizeX, sizeY];
+            for(int y = 0; y < sizeY; y++)
+            {
+                for (int x = 0; x < sizeX; x++)
+                {
+                    this.nodes[x, y] = new Node();
+                }
+            }
 
             this.nodeSize = nodeSize;
             this.sizeX = sizeX;
@@ -27,12 +34,13 @@ namespace Networking.Battleship.GameLogic
 
         public bool EvaluateMove(int indexX, int indexY)
         {
-            if (this.nodes[indexX, indexY].IsHit || indexX >= this.sizeX || indexY >= this.sizeY || indexX < this.sizeX || indexY < this.sizeY)
+            Node test = this.nodes[indexX, indexY];
+            if (this.nodes[indexX, indexY].IsHit || indexX < 0 || indexY < 0 || indexX >= this.sizeX || indexY >= this.sizeY)
                 return false;
             return true;
         }
 
-        public bool ExcecuteMove(int indexX, int indexY)
+        public bool ExecuteMove(int indexX, int indexY)
         {
             this.nodes[indexX, indexY].IsHit = true;
 
