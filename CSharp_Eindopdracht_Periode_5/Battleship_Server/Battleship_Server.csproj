@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Net\Authorizer.cs" />
     <Compile Include="Net\BattleshipServer.cs" />
+    <Compile Include="GameLogic\Game.cs" />
     <Compile Include="Net\Player.cs" />
     <Compile Include="Net\Session.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

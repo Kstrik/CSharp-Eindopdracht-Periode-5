@@ -5,8 +5,65 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Battleship"
         mc:Ignorable="d"
-        Title="LobbyWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="LobbyWindow" Height="450" Width="800" WindowStartupLocation="CenterScreen" Background="#FF1E1E1E">
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+            <Style.Setters>
+                <Setter Property="Background" Value="#FF2D2D30"></Setter>
+                <Setter Property="Foreground" Value="White"></Setter>
+                <Setter Property="BorderBrush" Value="Transparent"></Setter>
+                <Setter Property="Margin" Value="5,0,5,0"></Setter>
+            </Style.Setters>
+        </Style>
+        <ControlTemplate x:Key="ButtonControlTemplate" TargetType="{x:Type Button}">
+            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsDefaulted" Value="True">
+                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FF007ACC"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF007ACC"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FF007ACC"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF007ACC"/>
+                </Trigger>
+                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FFBCDDEE"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF007ACC"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" TargetName="border" Value="#FF323234"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF323234"/>
+                    <Setter Property="Foreground" Value="#FF838383"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
+    <Grid Background="#FF1E1E1E" Margin="2,2,2,2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <local:Container x:Name="con_Players" Header="Players: " Grid.ColumnSpan="2" Grid.RowSpan="2" Background="#FF1E1E1E" Foreground="#FF2D2D30" HeaderForeground="White" FontSize="12" Margin="2,2,2,2" ScrollbarVisibility="Hidden">
+            <!--<local:PlayerListItem Foreground="White" Margin="5,5,5,5" InnerMargin="5,5,5,5" Background="#FF2D2D30" Username="Kstrik" ButtonStyle="{StaticResource ButtonStyle}" ButtonTemplate="{DynamicResource ButtonControlTemplate}"></local:PlayerListItem>-->
+        </local:Container>
+        <local:Container Header="Options" Grid.Column="2" Background="#FF1E1E1E" Foreground="#FF2D2D30" HeaderForeground="White" FontSize="12" Margin="2,2,2,2">
+            <Button x:Name="btn_ReadyToggle" Content="Ready" Height="30" Style="{StaticResource ButtonStyle}" Template="{DynamicResource ButtonControlTemplate}" Margin="5,5,5,5" Click="ReadyToggle_Click"></Button>
+            <Button x:Name="btn_Leave" Content="Leave" Height="30" Style="{StaticResource ButtonStyle}" Template="{DynamicResource ButtonControlTemplate}" Margin="5,0,5,5" Click="Leave_Click"></Button>
+        </local:Container>
+        <local:Container Header="Chat" Grid.Column="2" Grid.Row="1" Background="#FF1E1E1E" Foreground="#FF2D2D30" HeaderForeground="White" FontSize="12" Margin="2,2,2,2">
+            <TextBox x:Name="txb_Chat" Foreground="White" Background="#FF2D2D30" Margin="5,5,5,0" FontSize="12" BorderBrush="#FF686868" Height="90" IsReadOnly="True"></TextBox>
+            <TextBox x:Name="txb_ChatMessage" Foreground="White" Background="#FF2D2D30" Margin="5,5,5,0" FontSize="12" BorderBrush="#FF686868" Height="20"></TextBox>
+            <Button x:Name="btn_SendMessage" Content="Send" Height="30" Style="{StaticResource ButtonStyle}" Template="{DynamicResource ButtonControlTemplate}" Margin="5,5,5,5" Click="SendMessage_Click"></Button>
+        </local:Container>
     </Grid>
 </Window>

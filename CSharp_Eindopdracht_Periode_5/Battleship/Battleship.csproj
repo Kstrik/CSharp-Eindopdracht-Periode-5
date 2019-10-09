@@ -71,10 +71,15 @@
     </Compile>
     <Compile Include="Net\BattleshipClient.cs" />
     <Compile Include="Net\IServerMessageReceiver.cs" />
+    <Compile Include="Net\Player.cs" />
+    <Compile Include="PlayerListItem.xaml.cs">
+      <DependentUpon>PlayerListItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SessionListItem.xaml.cs">
       <DependentUpon>SessionListItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="GameLogic\World.cs" />
+    <Compile Include="UserLogin.cs" />
     <Page Include="AuthorizationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -103,6 +108,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PlayerListItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SessionListItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

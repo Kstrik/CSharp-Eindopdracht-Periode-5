@@ -60,7 +60,7 @@
             <Button x:Name="btn_Refresh" Content="Refresh sessions" Height="30" Style="{StaticResource ButtonStyle}" Template="{DynamicResource ButtonControlTemplate}" Margin="5,5,5,5" Click="Refresh_Click"></Button>
             <Button x:Name="btn_Logout" Content="Logout" Height="30" Style="{StaticResource ButtonStyle}" Template="{DynamicResource ButtonControlTemplate}" Margin="5,0,5,5" Click="Logout_Click"></Button>
             <Label Content="Session name:" Foreground="White" Margin="5,5,5,5" FontSize="12" BorderBrush="#FF686868"></Label>
-            <TextBox x:Name="txb_SessionName" Foreground="White" Background="#FF2D2D30" Margin="5,5,5,5" FontSize="14" BorderBrush="#FF686868"></TextBox>
+            <TextBox x:Name="txb_SessionName" Foreground="White" Background="#FF2D2D30" Margin="5,5,5,0" FontSize="14" BorderBrush="#FF686868"></TextBox>
             <Button x:Name="btn_HostSession" Content="Host session" Height="30" Style="{StaticResource ButtonStyle}" Template="{DynamicResource ButtonControlTemplate}" Margin="5,5,5,5" Click="HostSession_Click"></Button>
         </local:Container>
     </Grid>

@@ -32,7 +32,9 @@ namespace Battleship_Server.Net
                 {
                     if(this.sessions.Where(s => s.GetName() == name).Count() == 0)
                     {
-                        this.sessions.Add(new Session(maxClientCount, host, name, this));
+                        Session session = new Session(maxClientCount, host, name, this);
+                        this.sessions.Add(session);
+                        host.Session = session;
                         this.Transmit(new Message(Message.ID.ADD_SESSION, Message.State.OK, null), host.GetConnection());
 
                         BroadcastSessions();
@@ -68,7 +70,10 @@ namespace Battleship_Server.Net
                 player.Session.LeaveSession(player);
 
                 if (session.GetHost() == player)
+                {
                     RemoveSession(session);
+                    Broadcast(new Message(Message.ID.REMOVE_SESSION, Message.State.OK, Encoding.UTF8.GetBytes(session.SessionId)));
+                }
 
                 BroadcastSessions();
             }
@@ -83,7 +88,7 @@ namespace Battleship_Server.Net
         private void BroadcastSessions()
         {
             foreach (Session session in this.sessions)
-                this.Broadcast(new Message(Message.ID.SESSIONDATA, Message.State.NONE, Encoding.UTF8.GetBytes(session.SessionId + session.GetName() + session.GetPlayers().Count().ToString())));
+                this.Broadcast(new Message(Message.ID.SESSIONDATA, Message.State.NONE, session.GetBytes()));
         }
 
         public void OnDataReceived(byte[] data, ClientConnection connection)
@@ -128,7 +133,7 @@ namespace Battleship_Server.Net
                         if (player.IsAuthorized)
                         {
                             foreach(Session session in this.sessions)
-                                this.Transmit(new Message(Message.ID.SESSIONDATA, Message.State.NONE, Encoding.UTF8.GetBytes(session.SessionId + session.GetName() + session.GetPlayers().Count().ToString())), connection);
+                                this.Transmit(new Message(Message.ID.SESSIONDATA, Message.State.NONE, session.GetBytes()), connection);
                         }
                         break;
                     }
@@ -150,6 +155,11 @@ namespace Battleship_Server.Net
                             LeaveSession(player);
                         break;
                     }
+                default:
+                    {
+                        player.Session.HandleMessage(message, player);
+                        break;
+                    }
             }
         }
 
@@ -161,8 +171,7 @@ namespace Battleship_Server.Net
         public void OnClientDisconnected(ClientConnection connection)
         {
             Player player = GetPlayer(connection);
-            //Session session = this.sessions.Where(s => s.GetPlayers().Contains(player)).First();
-            //session?.LeaveSession(player);
+            player.Logout();
             LeaveSession(player);
 
             this.players.Remove(player);

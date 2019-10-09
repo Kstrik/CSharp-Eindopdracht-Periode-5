@@ -15,6 +15,7 @@ namespace Battleship.GameObjects
     class Grid : GameObject
     {
         GameObject marker;
+
         public Grid(Game game)
             : base(game)
         {

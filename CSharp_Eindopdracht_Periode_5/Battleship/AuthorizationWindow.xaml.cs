@@ -35,6 +35,8 @@ namespace Battleship
         {
             InitializeComponent();
 
+            //Networking.Battleship.GameLogic.GridObject test = new Networking.Battleship.GameLogic.GridObject(2);
+
             if (this.battleshipClient == null)
                 this.battleshipClient = new BattleshipClient("127.0.0.1", 1551, this);
             else
@@ -166,10 +168,11 @@ namespace Battleship
 
                             if (message.GetState() == Message.State.OK)
                             {
+                                UserLogin.Username = txb_LoginUsername.Text;
                                 lbl_LoginError.Visibility = Visibility.Hidden;
-                                //GameBrowser gameBrowser = new GameBrowser();
-                                //gameBrowser.Show();
-                                //this.Close();
+                                GameBrowser gameBrowser = new GameBrowser(this.battleshipClient);
+                                gameBrowser.Show();
+                                this.Close();
                             }
                             else if (message.GetState() == Message.State.ERROR)
                             {

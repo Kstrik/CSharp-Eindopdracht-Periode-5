@@ -42,7 +42,17 @@ namespace Battleship_Server.Net
 
         public void Logout()
         {
+            this.username = "";
             this.isAuthorized = false;
+        }
+
+        public byte[] GetBytes()
+        {
+            List<byte> bytes = new List<byte>();
+            bytes.Add((byte)((this.Session.GetHost() == this) ? 1 : 0));
+            bytes.AddRange(Encoding.UTF8.GetBytes(this.username));
+
+            return bytes.ToArray();
         }
 
         public ClientConnection GetConnection()

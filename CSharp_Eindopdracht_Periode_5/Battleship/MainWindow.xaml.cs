@@ -90,8 +90,6 @@ namespace Battleship
                     break;
             }
         }
-    }
-}
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
