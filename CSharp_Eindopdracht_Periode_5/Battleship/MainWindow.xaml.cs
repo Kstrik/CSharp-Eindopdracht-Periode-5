@@ -23,21 +23,26 @@ namespace Battleship
     {
         private Viewport3D viewport;
         private Game game;
+        //Battleship.GameObjects.Grid grid; 
 
         public MainWindow()
         {
             InitializeComponent();
-            this.viewport = new Viewport3D();
-            this.Content = this.viewport;
-            this.game = new Game(Application.Current.Dispatcher, ref this.viewport);
+            //this.viewport = new Viewport3D();
+            //this.Content = this.viewport;
+            this.game = new Game(Application.Current.Dispatcher, ref vwp);
 
-            this.Closing += MainWindow_Closing;
+            //this.Closing += MainWindow_Closing;
             this.game.Start();
             this.KeyDown += MainWindow_KeyDown;
             this.KeyUp += MainWindow_KeyUp;
             this.MouseDown += MainWindow_MouseDown;
             this.MouseUp += MainWindow_MouseUp;
             this.MouseMove += MainWindow_MouseMove;
+            //grid = new Battleship.GameObjects.Grid(this.game);
+
+
+
 
             //this.Cursor = Cursors.None;
         }
@@ -53,37 +58,37 @@ namespace Battleship
 
         private void MainWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            GameInput.OnMouseDown(e.ChangedButton, e.GetPosition(this.viewport));
+            GameInput.OnMouseDown(e.ChangedButton, e.GetPosition(vwp));
         }
 
         private void MainWindow_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            GameInput.OnMouseUp(e.ChangedButton, e.GetPosition(this.viewport));
+            GameInput.OnMouseUp(e.ChangedButton, e.GetPosition(vwp));
         }
 
         private void MainWindow_MouseMove(object sender, MouseEventArgs e)
         {
             if(e.MiddleButton == MouseButtonState.Pressed)
-                GameInput.OnMouseMove(e.GetPosition(this.viewport));
+                GameInput.OnMouseMove(e.GetPosition(vwp));
         }
 
         private void Ship_MouseDown(object sender, MouseButtonEventArgs e)
         {
             switch ((sender as Image).Name)
             {
-                case "Carrier":
+                case "carrier":
+                    //load boats in
+                    break;
+                case "cruiser":
 
                     break;
-                case "Cruiser":
+                case "battleship":
 
                     break;
-                case "Battleship":
+                case "submarine":
 
                     break;
-                case "Submarine":
-
-                    break;
-                case "Destroyer":
+                case "destroyer":
 
                     break;
                 default:
