@@ -18,10 +18,13 @@ namespace Battleship_Server.Net
         public bool IsAuthorized { get { return this.isAuthorized; } }
         private bool isAuthorized;
 
+        public bool IsReady;
+
         public Player(ClientConnection clientConnection)
         {
             this.clientConnection = clientConnection;
             this.isAuthorized = false;
+            this.IsReady = false;
         }
 
         public bool Register(string username, string password)

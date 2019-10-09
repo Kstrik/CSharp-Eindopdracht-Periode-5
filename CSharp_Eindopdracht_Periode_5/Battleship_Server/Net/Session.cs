@@ -1,4 +1,5 @@
-﻿using Networking;
+﻿using Battleship_Server.GameLogic;
+using Networking;
 using Networking.Battleship;
 using Networking.Server;
 using System;
@@ -18,6 +19,8 @@ namespace Battleship_Server.Net
         private Player host;
         private string name;
         private BattleshipServer battleshipServer;
+
+        private Game game;
 
         public Session(int maxPlayerCount, Player host, string name, BattleshipServer battleshipServer)
         {
@@ -83,7 +86,7 @@ namespace Battleship_Server.Net
                     }
                 case Message.ID.GET_PLAYERS:
                     {
-                        if (player.IsAuthorized)
+                        if (player.IsAuthorized && this.game == null)
                         {
                             foreach (Player playerInSession in this.players)
                                 this.battleshipServer.Transmit(new Message(Message.ID.PLAYERDATA, Message.State.OK, playerInSession.GetBytes()), player.GetConnection());
@@ -92,26 +95,55 @@ namespace Battleship_Server.Net
                     }
                 case Message.ID.READY:
                     {
+                        if (this.game != null)
+                            this.game.HandleMessage(message, player);
 
+                        if (player.IsAuthorized)
+                        {
+                            player.IsReady = true;
+                            this.battleshipServer.Transmit(new Message(Message.ID.READY, Message.State.OK, null), player.GetConnection());
+                        }
                         break;
                     }
                 case Message.ID.UNREADY:
                     {
+                        if (this.game != null)
+                            this.game.HandleMessage(message, player);
 
+                        if (player.IsAuthorized)
+                        {
+                            player.IsReady = false;
+                            this.battleshipServer.Transmit(new Message(Message.ID.UNREADY, Message.State.OK, null), player.GetConnection());
+                        }
                         break;
                     }
-                case Message.ID.SUBMIT_BOATS:
+                case Message.ID.START_GAME:
                     {
-
+                        if (player.IsAuthorized && this.host == player && this.game == null)
+                        {
+                            this.game = new Game(new GamePlayer(this.players[0]), new GamePlayer(this.players[1]), this, this.battleshipServer);
+                            Broadcast(new Message(Message.ID.START_GAME, Message.State.OK, null));
+                        }
                         break;
                     }
-                case Message.ID.SUBMIT_MOVE:
+                case Message.ID.END_GAME:
                     {
-
+                        if (player.IsAuthorized && this.game != null)
+                        {
+                            this.game = null;
+                            Broadcast(new Message(Message.ID.END_GAME, Message.State.OK, content.ToArray()));
+                        }
                         break;
                     }
                 default:
                     {
+                        if (this.game != null)
+                        {
+                            if(!this.game.HandleMessage(message, player))
+                            {
+                                this.game = null;
+                            }
+                        }
                         break;
                     }
             }

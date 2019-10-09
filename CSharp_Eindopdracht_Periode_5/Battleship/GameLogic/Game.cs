@@ -48,6 +48,13 @@ namespace Battleship.GameLogic
             myDirectionalLight.Direction = new System.Windows.Media.Media3D.Vector3D(0, -1, -1);
             this.world.AddLight(myDirectionalLight);
 
+            //Water water1 = new Water(this);
+            //water1.Position = new Vector3D(-5.5, -2.2, 0);
+            //this.world.AddGameObject(water1);
+            //Water water2 = new Water(this);
+            //water2.Position = new Vector3D(5.5, -2.2, 0);
+            //this.world.AddGameObject(water2);
+
             GameObject gameObject = new GameObject(this);
             gameObject.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.AircraftCarrierModel));
             gameObject.Material = new DiffuseMaterial(Brushes.Blue);
@@ -65,9 +72,6 @@ namespace Battleship.GameLogic
             enemyGrid.Marker.Position = new Vector3D(enemyGrid.Position.X - 4.5, enemyGrid.Position.Y, enemyGrid.Position.Z - 4.5);
             this.world.AddGameObject(enemyGrid.Marker);
             this.world.AddGameObject(enemyGrid);
-
-            //Water water = new Water(this);
-            //this.world.AddGameObject(water);
         }
 
         private void InitiliazeThread()

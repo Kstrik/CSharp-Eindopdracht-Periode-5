@@ -58,8 +58,6 @@ namespace Battleship.GameObjects
             this.Marker.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.HighlighterModel));
             this.Marker.Material = new DiffuseMaterial(Brushes.Blue);
 
-            this.battleshipGrid.ExecuteMove(1, 1);
-
             GameInput.KeyUp += OnKeyUp;
             SetActive(true);
         }

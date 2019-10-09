@@ -28,8 +28,7 @@ namespace Networking.Battleship
             START_GAME = 0xF,
             END_GAME = 0x10,
             SUBMIT_MOVE = 0x11,
-            SUBMIT_BOATS = 0x12,
-            NEXT_TURN = 0X13
+            SUBMIT_BOATS = 0x12
         }
 
         public enum State

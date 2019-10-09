@@ -32,6 +32,9 @@ namespace Networking.Battleship.GameLogic
             this.origin = origin;
         }
 
+        public BattleshipGrid(int sizeX, int sizeY)
+            : this(1, sizeX, sizeY, new System.Windows.Media.Media3D.Point3D(0, 0, 0)) { }
+
         public bool EvaluateMove(int indexX, int indexY)
         {
             Node test = this.nodes[indexX, indexY];

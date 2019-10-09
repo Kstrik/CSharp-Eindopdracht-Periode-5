@@ -26,6 +26,8 @@ namespace Battleship.GameObjects.Water
         private float time;
         private int vertexesCount;
 
+        int frameCounter = 0;
+
         public Water(Game game) 
             : base(game)
         {
@@ -61,21 +63,28 @@ namespace Battleship.GameObjects.Water
         {
             base.Update(deltatime);
 
-            this.time += deltatime / 2;
+            this.time += deltatime / 16;
             if (this.time >= 100.0f)
             {
                 this.time = 0;
             }
 
-            for (int i = 0; i < this.vertexesCount; i++)
-            {
-                Vertex vertex = new Vertex(new Vector3D((float)this.orignalPositions[i].X, (float)this.orignalPositions[i].Y, (float)this.orignalPositions[i].Z),
-                                            null,
-                                            new Vector3D((float)this.orignalNormals[i].X, (float)this.orignalNormals[i].Y, (float)this.orignalNormals[i].Z));
+            this.frameCounter++;
+            if (this.frameCounter == 17)
+                this.frameCounter = 0;
 
-                CalucluateVertexPosition(vertex, time);
-                this.mesh.Positions[i] = new System.Windows.Media.Media3D.Point3D(vertex.Vertice.X, vertex.Vertice.Y, vertex.Vertice.Z);
-                //this.waterPlane.GetMesh().Normals[i] = new System.Windows.Media.Media3D.Vector3D(vertex.Normal.X, vertex.Normal.Y, vertex.Normal.Z);
+            if(this.frameCounter == 16)
+            {
+                for (int i = 0; i < this.vertexesCount; i++)
+                {
+                    Vertex vertex = new Vertex(new Vector3D((float)this.orignalPositions[i].X, (float)this.orignalPositions[i].Y, (float)this.orignalPositions[i].Z),
+                                                null,
+                                                new Vector3D((float)this.orignalNormals[i].X, (float)this.orignalNormals[i].Y, (float)this.orignalNormals[i].Z));
+
+                    CalucluateVertexPosition(vertex, time);
+                    this.mesh.Positions[i] = new System.Windows.Media.Media3D.Point3D(vertex.Vertice.X, vertex.Vertice.Y, vertex.Vertice.Z);
+                    //this.waterPlane.GetMesh().Normals[i] = new System.Windows.Media.Media3D.Vector3D(vertex.Normal.X, vertex.Normal.Y, vertex.Normal.Z);
+                }
             }
         }
 
