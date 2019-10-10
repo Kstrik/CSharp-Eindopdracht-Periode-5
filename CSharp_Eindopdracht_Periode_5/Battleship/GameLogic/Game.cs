@@ -2,6 +2,7 @@
 using Battleship.GameObjects;
 using Battleship.GameObjects.Water;
 using MLlib;
+using Networking.Battleship;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,8 +33,15 @@ namespace Battleship.GameLogic
         private SelectionGrid playerGrid;
         private SelectionGrid enemyGrid;
 
+        private List<Ship> ships;
+        private int currentShipsIndex;
+        private bool isInSetup;
+
         public Game(Dispatcher dispatcher, ref Viewport3D viewport)
         {
+            this.isInSetup = true;
+            this.currentShipsIndex = 0;
+            this.ships = new List<Ship>();
             this.timing = Timing.GetInstance();
             this.mainDispatcher = dispatcher;
             this.world = new World(this, ref viewport);
@@ -59,6 +67,32 @@ namespace Battleship.GameLogic
             //SetupWater();
             SetupGrids();
             this.playerGrid.Ship = gameObject;
+
+            SetupShips();
+            this.ships[0].Scaling = new Vector3D(1, 1, 1);
+            this.playerGrid.Ship = this.ships[0];
+        }
+
+        public void SetupShips()
+        {
+            List<(string shippath, int size)> shipsAssets = new List<(string shippath, int size)>()
+            {
+                (shippath: Asset.AircraftCarrierModel, size: 5),
+                (shippath: Asset.BattleShipModel, size: 4),
+                (shippath: Asset.CruiserModel, size: 3),
+                (shippath: Asset.SubmarineModel, size: 3),
+                (shippath: Asset.DestroyerModel, size: 2)
+            };
+
+            foreach ((string shippath, int size) ship in shipsAssets)
+            {
+                Ship gameObject = new Ship(this, ship.size);
+                gameObject.Scaling = new Vector3D(0, 0, 0);
+                gameObject.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(ship.shippath));
+                gameObject.Material = new DiffuseMaterial(Brushes.Blue);
+                this.world.AddGameObject(gameObject);
+                ships.Add(gameObject);
+            }         
         }
 
         private void SetupWater()
@@ -90,7 +124,48 @@ namespace Battleship.GameLogic
         {
             if (key == Key.Enter)
             {
+                if (this.playerGrid.GetBattleshipGrid().CheckGridObjectPlacement(this.ships[this.currentShipsIndex].GetGridObject()))
+                {
+                    this.playerGrid.Ship = null;
+                    currentShipsIndex++;
+                }
+                if (currentShipsIndex == this.ships.Count())
+                {
 
+                }
+            }
+        }
+
+        public void HandleMessage(Message message)
+        {
+            List<byte> content = new List<byte>(message.GetContent());
+
+            switch (message.GetId())
+            {
+                case Message.ID.START_MATCH:
+                    {
+                        if (message.GetState() == Message.State.OK)
+                        {
+                            this.isInSetup = false;
+                        }
+                        else if (message.GetState() == Message.State.ERROR)
+                        {
+
+                        }
+                        break;
+                    }
+                case Message.ID.SUBMIT_MOVE:
+                    {
+                        if (message.GetState() == Message.State.OK)
+                        {
+                            this.playerGrid.
+                        }
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
             }
         }
 
