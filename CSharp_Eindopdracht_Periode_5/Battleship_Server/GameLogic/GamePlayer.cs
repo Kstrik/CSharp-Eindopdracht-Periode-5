@@ -14,12 +14,14 @@ namespace Battleship_Server.GameLogic
         public Player Player { get; }
 
         public int HitPoints;
+        public bool HasPlacedBoats;
 
         public GamePlayer(Player player)
         {
             this.grid = new BattleshipGrid(10, 10);
             this.Player = player;
             this.HitPoints = 17;
+            this.HasPlacedBoats = false;
         }
 
         public BattleshipGrid GetGrid()

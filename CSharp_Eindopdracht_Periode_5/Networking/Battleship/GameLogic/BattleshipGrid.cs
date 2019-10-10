@@ -33,7 +33,7 @@ namespace Networking.Battleship.GameLogic
         }
 
         public BattleshipGrid(int sizeX, int sizeY)
-            : this(1, sizeX, sizeY, new System.Windows.Media.Media3D.Point3D(0, 0, 0)) { }
+            : this(1, sizeX, sizeY, new Point3D(0, 0, 0)) { }
 
         public bool EvaluateMove(int indexX, int indexY)
         {
@@ -70,16 +70,23 @@ namespace Networking.Battleship.GameLogic
 
         public bool CheckGridObjectPlacement(GridObject gridObject)
         {
-            Tuple<int, int> frontIndex = gridObject.GetIndexFront();
-            Tuple<int, int> backIndex = gridObject.GetIndexBack();
+            (int indexX, int indexY) frontIndex = gridObject.GetIndexFront();
+            (int indexX, int indexY) backIndex = gridObject.GetIndexBack();
 
-            if (frontIndex.Item1 >= 0 && frontIndex.Item1 < this.sizeX &&
-                frontIndex.Item2 >= 0 && frontIndex.Item2 < this.sizeY &&
-                backIndex.Item1 >= 0 && backIndex.Item1 < this.sizeX &&
-                backIndex.Item2 >= 0 && backIndex.Item2 < this.sizeY)
+            if (frontIndex.indexX >= 0 && frontIndex.indexX < this.sizeX &&
+                frontIndex.indexY >= 0 && frontIndex.indexY < this.sizeY &&
+                backIndex.indexX >= 0 && backIndex.indexX < this.sizeX &&
+                backIndex.indexY >= 0 && backIndex.indexY < this.sizeY)
                 return true;
 
             return false;
+        }
+
+        public void PlaceGridObject(GridObject gridObject)
+        {
+            List<(int X, int Y)> indices = gridObject.GetCoveredIndices();
+            foreach ((int X, int Y) index in indices)
+                this.nodes[index.X, index.Y].IsOccupied = true;
         }
 
         public void SetOrigin(Point3D origin)

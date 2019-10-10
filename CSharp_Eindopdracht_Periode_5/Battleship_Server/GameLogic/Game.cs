@@ -1,5 +1,6 @@
 ﻿using Battleship_Server.Net;
 using Networking.Battleship;
+using Networking.Battleship.GameLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,44 @@ namespace Battleship_Server.GameLogic
             this.currentTurnIndex = 0;
             this.session = session;
             this.battleshipServer = battleshipServer;
+        }
+
+        private void SubmitBoats(List<(int indexX, int indexY, int direction)> boatsData, Player player)
+        {
+            GamePlayer gamePlayer = this.players.Where(p => p.Player == player).First();
+            if(gamePlayer.HasPlacedBoats)
+                this.battleshipServer.Transmit(new Message(Message.ID.SUBMIT_BOATS, Message.State.ERROR, Encoding.UTF8.GetBytes("Already placed boats!")), gamePlayer.Player.GetConnection());
+
+            List<GridObject> gridobjects = new List<GridObject>();
+
+            if (boatsData.Count != 5)
+                this.battleshipServer.Transmit(new Message(Message.ID.SUBMIT_BOATS, Message.State.ERROR, Encoding.UTF8.GetBytes("Invalid boat data!")), gamePlayer.Player.GetConnection());
+
+            int[] sizes = new int[5] { 2, 3, 3, 4, 5 };
+            int index = 0;
+            foreach((int indexX, int indexY, int direction) boatData in boatsData)
+            {
+                GridObject gridObject = new GridObject(sizes[index], boatData.indexX, boatData.indexY, (GridObject.Direction)boatData.direction);
+                if (!gamePlayer.GetGrid().CheckGridObjectPlacement(gridObject))
+                {
+                    this.battleshipServer.Transmit(new Message(Message.ID.SUBMIT_BOATS, Message.State.ERROR, Encoding.UTF8.GetBytes("Invalid boat data!")), gamePlayer.Player.GetConnection());
+                    return;
+                }
+                else
+                    gridobjects.Add(gridObject);
+                index++;
+            }
+
+            foreach (GridObject gridObject in gridobjects)
+                gamePlayer.GetGrid().PlaceGridObject(gridObject);
+
+            gamePlayer.HasPlacedBoats = true;
+
+            if (this.players[0].HasPlacedBoats && this.players[1].HasPlacedBoats)
+            {
+                this.session.Broadcast(new Message(Message.ID.START_MATCH, Message.State.OK, null));
+                this.state = GameState.GAME;
+            }
         }
 
         private bool SubmitMove(int indexX, int indexY)
@@ -73,7 +112,16 @@ namespace Battleship_Server.GameLogic
                     {
                         if(player.IsAuthorized && this.state == GameState.SETUP)
                         {
+                            if(content.Count == 0 || content.Count / 5 != 0)
+                                this.battleshipServer.Transmit(new Message(Message.ID.SUBMIT_BOATS, Message.State.ERROR, Encoding.UTF8.GetBytes("Invalid boat data!")), player.GetConnection());
+                            else
+                            {
+                                List<(int indexX, int indexY, int direction)> boatsData = new List<(int indexX, int indexY, int direction)>();
+                                for (int i = 0; i < content.Count; i += 3)
+                                    boatsData.Add((indexX: content[i], indexY: content[i + 1], direction: content[i + 2]));
 
+                                SubmitBoats(boatsData, player);
+                            }
                         }
                         break;
                     }
