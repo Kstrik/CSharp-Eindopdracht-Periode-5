@@ -73,7 +73,6 @@
     </Compile>
     <Compile Include="Net\BattleshipClient.cs" />
     <Compile Include="Net\IServerMessageReceiver.cs" />
-    <Compile Include="Net\Player.cs" />
     <Compile Include="PlayerListItem.xaml.cs">
       <DependentUpon>PlayerListItem.xaml</DependentUpon>
     </Compile>

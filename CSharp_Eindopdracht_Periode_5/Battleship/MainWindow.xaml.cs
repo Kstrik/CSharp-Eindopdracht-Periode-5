@@ -1,4 +1,6 @@
 ﻿using Battleship.GameLogic;
+using Battleship.Net;
+using Networking.Battleship;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,23 +15,30 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Battleship
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IServerMessageReceiver
     {
+        private BattleshipClient battleshipClient;
+
         private Viewport3D viewport;
         private Game game;
         //Battleship.GameObjects.Grid grid; 
 
-        public MainWindow()
+        public MainWindow(BattleshipClient battleshipClient)
         {
             InitializeComponent();
             //this.viewport = new Viewport3D();
             //this.Content = this.viewport;
+
+            this.battleshipClient = battleshipClient;
+            this.battleshipClient.SetMessageReceiver(this);
+
             this.game = new Game(Application.Current.Dispatcher, ref vwp);
 
             //this.Closing += MainWindow_Closing;
@@ -63,7 +72,8 @@ namespace Battleship
 
         private void MainWindow_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            GameInput.OnMouseUp(e.ChangedButton, e.GetPosition(vwp));
+            if(!txb_ChatMessage.IsFocused)
+                GameInput.OnMouseUp(e.ChangedButton, e.GetPosition(vwp));
         }
 
         private void MainWindow_MouseMove(object sender, MouseEventArgs e)
@@ -109,6 +119,75 @@ namespace Battleship
         private void StopGame_Click(object sender, RoutedEventArgs e)
         {
             this.game.Stop();
+        }
+
+        public void OnMessageReceived(Message message)
+        {
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() =>
+            {
+                List<byte> content = new List<byte>(message.GetContent());
+
+                switch (message.GetId())
+                {
+                    case Message.ID.CHAT_MESSAGE:
+                        {
+                            if (message.GetState() == Message.State.OK)
+                            {
+                                int messageLength = content[0];
+                                string chatMessage = Encoding.UTF8.GetString(content.GetRange(1, messageLength).ToArray());
+                                string playerName = Encoding.UTF8.GetString(content.GetRange(messageLength + 1, content.Count - (messageLength + 1)).ToArray());
+
+                                txb_Chat.Text += $"{playerName}: {chatMessage}" + Environment.NewLine;
+                                txb_Chat.ScrollToEnd();
+                            }
+                            else if (message.GetState() == Message.State.ERROR)
+                                MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
+                            break;
+                        }
+                    case Message.ID.SUBMIT_BOATS:
+                        {
+                            if(message.GetState() == Message.State.OK)
+                            {
+
+                            }
+                            break;
+                        }
+                    case Message.ID.START_MATCH:
+                        {
+                            if (message.GetState() == Message.State.OK)
+                            {
+
+                            }
+                            break;
+                        }
+                    case Message.ID.SUBMIT_MOVE:
+                        {
+                            if (message.GetState() == Message.State.OK)
+                            {
+
+                            }
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
+            }));
+        }
+
+        private void SendMessage_Click(object sender, RoutedEventArgs e)
+        {
+            if (!String.IsNullOrEmpty(txb_ChatMessage.Text))
+            {
+                List<byte> bytes = new List<byte>();
+                bytes.Add((byte)txb_ChatMessage.Text.Length);
+                bytes.AddRange(Encoding.UTF8.GetBytes(txb_ChatMessage.Text));
+                bytes.AddRange(Encoding.UTF8.GetBytes(UserLogin.Username));
+
+                this.battleshipClient.Transmit(new Message(Message.ID.CHAT_MESSAGE, Message.State.NONE, bytes.ToArray()));
+                txb_ChatMessage.Text = "";
+            }
         }
     }
 }

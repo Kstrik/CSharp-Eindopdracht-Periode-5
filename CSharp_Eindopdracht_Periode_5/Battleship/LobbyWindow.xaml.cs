@@ -28,8 +28,6 @@ namespace Battleship
 
         private bool isReady;
 
-        private List<Player> players;
-
         public LobbyWindow(BattleshipClient battleshipClient, string sessionName, string sessionId, bool isHost)
         {
             InitializeComponent();
@@ -42,8 +40,6 @@ namespace Battleship
             con_Players.Header += this.sesionName;
 
             this.isReady = false;
-
-            this.players = new List<Player>();
 
             if (!isHost)
                 btn_StartGame.Visibility = Visibility.Collapsed;
@@ -193,7 +189,9 @@ namespace Battleship
                         {
                             if (message.GetState() == Message.State.OK)
                             {
-                                MessageBox.Show("Game started!");
+                                MainWindow gameWindow = new MainWindow(this.battleshipClient);
+                                gameWindow.Show();
+                                this.Close();
                             }
                             else
                                 MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
@@ -226,9 +224,6 @@ namespace Battleship
         private void Startgame_Click(object sender, RoutedEventArgs e)
         {
             this.battleshipClient.Transmit(new Message(Message.ID.START_GAME, Message.State.NONE, null));
-            //GameBrowser gameBrowser = new GameBrowser(this.battleshipClient);
-            //gameBrowser.Show();
-            //this.Close();
         }
 
         private void SendMessage_Click(object sender, RoutedEventArgs e)

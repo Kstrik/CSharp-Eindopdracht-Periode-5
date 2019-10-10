@@ -3,17 +3,68 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Battleship"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="500" Width="800">
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+            <Style.Setters>
+                <Setter Property="Background" Value="#FF2D2D30"></Setter>
+                <Setter Property="Foreground" Value="White"></Setter>
+                <Setter Property="BorderBrush" Value="Transparent"></Setter>
+                <Setter Property="Margin" Value="5,0,5,0"></Setter>
+            </Style.Setters>
+        </Style>
+        <ControlTemplate x:Key="ButtonControlTemplate" TargetType="{x:Type Button}">
+            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsDefaulted" Value="True">
+                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FF007ACC"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF007ACC"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FF007ACC"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF007ACC"/>
+                </Trigger>
+                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FFBCDDEE"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF007ACC"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" TargetName="border" Value="#FF323234"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF323234"/>
+                    <Setter Property="Foreground" Value="#FF838383"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="200"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Column="0" Grid.Row="0"  Background="#FF655C5C" >
+
+        <local:Container Header="Chat" Grid.Column="3" Grid.Row="3" Grid.RowSpan="2" Background="#FF1E1E1E" Foreground="#FF2D2D30" HeaderForeground="White" FontSize="12" Margin="2,2,2,2">
+            <TextBox x:Name="txb_Chat" Foreground="White" Background="#FF2D2D30" Margin="5,5,5,0" FontSize="12" BorderBrush="#FF686868" Height="70" IsReadOnly="True"></TextBox>
+            <TextBox x:Name="txb_ChatMessage" Foreground="White" Background="#FF2D2D30" Margin="5,5,5,0" FontSize="12" BorderBrush="#FF686868" Height="20"></TextBox>
+            <Button x:Name="btn_SendMessage" Content="Send" Height="30" Style="{StaticResource ButtonStyle}" Template="{DynamicResource ButtonControlTemplate}" Margin="5,5,5,5" Click="SendMessage_Click"></Button>
+        </local:Container>
+        
+        <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="5"  Background="#FF007ACC" >
             <Label Content="Carrier"></Label>
             <Image Height="60" Name="carrier" Source="Assets/Images/Carrier.png" MouseDown="Ship_MouseDown">
             </Image>
@@ -26,6 +77,6 @@
             <Label Content="Destroyer"></Label>
             <Image Height="60" Name="destroyer" Source="Assets/Images/Destroyer.png" MouseDown="Ship_MouseDown"/>
         </StackPanel>
-        <Viewport3D Name="vwp" Grid.Column="1" Grid.Row="0"></Viewport3D>
+        <Viewport3D Name="vwp" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="5"></Viewport3D>
     </Grid>
 </Window>
