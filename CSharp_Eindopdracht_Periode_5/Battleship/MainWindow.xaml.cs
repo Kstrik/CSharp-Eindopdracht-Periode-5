@@ -26,15 +26,11 @@ namespace Battleship
     {
         private BattleshipClient battleshipClient;
 
-        private Viewport3D viewport;
         private Game game;
-        //Battleship.GameObjects.Grid grid; 
 
         public MainWindow(BattleshipClient battleshipClient)
         {
             InitializeComponent();
-            //this.viewport = new Viewport3D();
-            //this.Content = this.viewport;
 
             this.battleshipClient = battleshipClient;
             this.battleshipClient.SetMessageReceiver(this);
@@ -49,8 +45,6 @@ namespace Battleship
             this.MouseUp += MainWindow_MouseUp;
             this.MouseMove += MainWindow_MouseMove;
             //grid = new Battleship.GameObjects.Grid(this.game);
-
-
 
 
             //this.Cursor = Cursors.None;
@@ -84,7 +78,7 @@ namespace Battleship
 
         private void Ship_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            switch ((sender as Image).Name)
+            switch ((sender as Image).Name.ToLower())
             {
                 case "carrier":
                     //load boats in
@@ -187,6 +181,14 @@ namespace Battleship
 
                 this.battleshipClient.Transmit(new Message(Message.ID.CHAT_MESSAGE, Message.State.NONE, bytes.ToArray()));
                 txb_ChatMessage.Text = "";
+            }
+        }
+
+        private void OnKeyUp(Key key)
+        {
+            if(key == Key.Enter)
+            {
+
             }
         }
     }

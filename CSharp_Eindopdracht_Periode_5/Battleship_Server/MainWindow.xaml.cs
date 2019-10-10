@@ -28,8 +28,7 @@ namespace Battleship_Server
             InitializeComponent();
 
             this.battleshipServer = new BattleshipServer("127.0.0.1", 1551);
+            //this.battleshipServer = new BattleshipServer("192.168.10.121", 25575);
         }
-
-
     }
 }

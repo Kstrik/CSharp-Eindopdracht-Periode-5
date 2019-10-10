@@ -36,7 +36,10 @@ namespace Battleship
             InitializeComponent();
 
             if (this.battleshipClient == null)
+            {
                 this.battleshipClient = new BattleshipClient("127.0.0.1", 1551, this);
+                //this.battleshipClient = new BattleshipClient("192.168.10.121", 25575, this);
+            }
             else
                 this.battleshipClient.SetMessageReceiver(this);
 
