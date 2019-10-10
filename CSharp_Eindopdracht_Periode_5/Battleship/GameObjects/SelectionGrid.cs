@@ -21,12 +21,17 @@ namespace Battleship.GameObjects
     public class SelectionGrid : GameObject
     {
         private BattleshipGrid battleshipGrid;
-        private GridObject gridObject;
+        //private GridObject gridObject;
 
         private Point index;
         public GameObject Marker;
 
-        public GameObject Ship;
+        public Ship Ship
+        {
+            get { return this.ship; }
+            set { SetShip(value); }
+        }
+        private Ship ship;
 
         public bool IsActive
         {
@@ -41,13 +46,11 @@ namespace Battleship.GameObjects
             : base(game)
         {
             this.battleshipGrid = new BattleshipGrid(1, 10, 10, new Point3D(this.Position.X, this.Position.Y, this.Position.Z));
-            this.gridObject = new GridObject(1, 0, 0);
+            //this.gridObject = new GridObject(1, 0, 0);
+            this.Ship = new Ship(game, 1);
 
             this.index = new Point(0, 0);
             this.isFriendly = isFriendly;
-
-            if (this.isFriendly)
-                this.gridObject.SetSize(5);
 
             this.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.GridPlaneModel));
             ImageBrush test = new ImageBrush(new BitmapImage(new Uri(Asset.GridImage, UriKind.Absolute)));
@@ -106,7 +109,7 @@ namespace Battleship.GameObjects
                     {
                         if (this.isFriendly)
                         {
-                            this.gridObject.RotateRight();
+                            this.Ship.GridObject.RotateRight();
                             if (this.Ship != null)
                                 this.Ship.Angle -= 90;
                         }
@@ -116,7 +119,7 @@ namespace Battleship.GameObjects
                     {
                         if (this.isFriendly)
                         {
-                            this.gridObject.RotateLeft();
+                            this.Ship.GridObject.RotateLeft();
                             if (this.Ship != null)
                                 this.Ship.Angle += 90;
                         }
@@ -124,15 +127,29 @@ namespace Battleship.GameObjects
                     }
             }
 
-            if(this.isFriendly)
+            //if(this.isFriendly)
+            //{
+            //    this.Ship.GridObject.SetOriginIndex((int)this.index.X, (int)this.index.Y);
+            //    if (this.battleshipGrid.CheckGridObjectPlacement(this.Ship.GridObject))
+            //        this.Marker.Material = new DiffuseMaterial(Brushes.Blue);
+            //    else
+            //        this.Marker.Material = new DiffuseMaterial(Brushes.Red);
+
+            //    if(this.Ship != null)
+            //    {
+            //        this.Ship.Position = this.Marker.Position + new Vector3D(0, 0, 0);
+            //        this.Ship.Material = this.Marker.Material;
+            //    }
+            //}
+            if (this.isFriendly && this.Ship != null)
             {
-                this.gridObject.SetOriginIndex((int)this.index.X, (int)this.index.Y);
-                if (this.battleshipGrid.CheckGridObjectPlacement(this.gridObject))
+                this.Ship.GridObject.SetOriginIndex((int)this.index.X, (int)this.index.Y);
+                if (this.battleshipGrid.CheckGridObjectPlacement(this.Ship.GridObject))
                     this.Marker.Material = new DiffuseMaterial(Brushes.Blue);
                 else
                     this.Marker.Material = new DiffuseMaterial(Brushes.Red);
 
-                if(this.Ship != null)
+                if (this.Ship != null)
                 {
                     this.Ship.Position = this.Marker.Position + new Vector3D(0, 0, 0);
                     this.Ship.Material = this.Marker.Material;
@@ -140,11 +157,26 @@ namespace Battleship.GameObjects
             }
             else
             {
-                if (this.battleshipGrid.EvaluateMove((int)this.index.X, (int)this.index.Y))
-                    this.Marker.Material = new DiffuseMaterial(Brushes.Blue);
-                else
-                    this.Marker.Material = new DiffuseMaterial(Brushes.Red);
+                UpdateMarkerMaterial();
             }
+        }
+
+        public void UpdateMarkerMaterial()
+        {
+            if (this.battleshipGrid.EvaluateMove((int)this.index.X, (int)this.index.Y))
+                this.Marker.Material = new DiffuseMaterial(Brushes.Blue);
+            else
+                this.Marker.Material = new DiffuseMaterial(Brushes.Red);
+        }
+
+        public Point GetIndex()
+        {
+            return this.index;
+        }
+
+        public BattleshipGrid GetBattleshipGrid()
+        {
+            return this.battleshipGrid;
         }
 
         private void SetActive(bool value)
@@ -155,6 +187,13 @@ namespace Battleship.GameObjects
                 this.Marker.Scaling = new Vector3D(1, 1, 1);
             else
                 this.Marker.Scaling = new Vector3D(0, 0, 0);
+        }
+
+        private void SetShip(Ship ship)
+        {
+            this.ship = ship;
+            if(ship != null)
+                this.ship.GridObject.SetOriginIndex((int)this.index.X, (int)this.index.Y);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Battleship.Assets
 
         public static string AircraftCarrierModel = assetsFolderPath + @"\Models\AircraftCarrier.obj";
         public static string BattleShipModel = assetsFolderPath + @"\Models\Battleship.obj";
-        public static string CruiserModel = assetsFolderPath + @"\Models\Carrier.obj";
+        public static string CruiserModel = assetsFolderPath + @"\Models\Cruiser.obj";
         public static string SubmarineModel = assetsFolderPath + @"\Models\Submarine.obj";
         public static string DestroyerModel = assetsFolderPath + @"\Models\Destroyer.obj";
 

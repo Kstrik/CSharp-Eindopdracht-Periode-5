@@ -10,16 +10,12 @@ namespace Battleship.GameObjects
 {
     public class Ship : GameObject
     {
-        private GridObject gridObject;
+        public GridObject GridObject;
 
-        public Ship(Game game, int size) : base(game)
+        public Ship(Game game, int size) 
+            : base(game)
         {
-            this.gridObject = new GridObject(size, 0,0);
-        }
-
-        public GridObject GetGridObject()
-        {
-            return gridObject;
+            this.GridObject = new GridObject(size, 0,0);
         }
     }
 }

@@ -37,7 +37,6 @@ namespace Networking.Battleship.GameLogic
 
         public bool EvaluateMove(int indexX, int indexY)
         {
-            Node test = this.nodes[indexX, indexY];
             if (this.nodes[indexX, indexY].IsHit || indexX < 0 || indexY < 0 || indexX >= this.sizeX || indexY >= this.sizeY)
                 return false;
             return true;
@@ -65,7 +64,9 @@ namespace Networking.Battleship.GameLogic
             if (this.sizeY % 2 == 0)
                 stepSizeY /= 2;
 
-            return new Point3D(indexX * stepSizeX, this.origin.Y, indexY * stepSizeY);
+            double startX = (-stepSizeX * (this.sizeX / 2)), startY = (-stepSizeY * (this.sizeY / 2));
+
+            return new Point3D(indexX * stepSizeX + startX, this.origin.Y, indexY * stepSizeY + startY);
         }
 
         public bool CheckGridObjectPlacement(GridObject gridObject)
@@ -87,6 +88,11 @@ namespace Networking.Battleship.GameLogic
             List<(int X, int Y)> indices = gridObject.GetCoveredIndices();
             foreach ((int X, int Y) index in indices)
                 this.nodes[index.X, index.Y].IsOccupied = true;
+        }
+
+        public Node GetNode(int indexX, int indexY)
+        {
+            return this.nodes[indexX, indexY];
         }
 
         public void SetOrigin(Point3D origin)

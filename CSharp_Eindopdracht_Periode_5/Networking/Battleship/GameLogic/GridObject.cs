@@ -10,10 +10,11 @@ namespace Networking.Battleship.GameLogic
         public enum Direction
         {
             UP = 0,
-            DOWN = 1,
-            LEFT = 2,
-            RIGHT = 3
+            RIGHT = 1,
+            DOWN = 2,
+            LEFT = 3,
         }
+        private Direction direction;
 
         private int originIndexX, originIndexY;
         private int directionX, directionY;
@@ -24,8 +25,7 @@ namespace Networking.Battleship.GameLogic
             SetSize(size);
             this.originIndexX = originIndexX;
             this.originIndexY = originIndexY;
-            this.directionX = 0;
-            this.directionY = 1;
+            SetDirection(Direction.DOWN);
         }
 
         public GridObject(int size, int originIndexX, int originIndexY, Direction direction)
@@ -41,6 +41,11 @@ namespace Networking.Battleship.GameLogic
             int tempX = this.directionX;
             this.directionX = -this.directionY;
             this.directionY = tempX;
+
+            if ((int)this.direction == 3)
+                this.direction = Direction.UP;
+            else
+                this.direction = this.direction++;
         }
 
         public void RotateLeft()
@@ -48,6 +53,11 @@ namespace Networking.Battleship.GameLogic
             int tempX = this.directionX;
             this.directionX = this.directionY;
             this.directionY = -tempX;
+
+            if ((int)this.direction == 0)
+                this.direction = Direction.LEFT;
+            else
+                this.direction = this.direction--;
         }
 
         public (int indexX, int indexY) GetIndexFront()
@@ -77,6 +87,16 @@ namespace Networking.Battleship.GameLogic
             return indices;
         }
 
+        public (int indexX, int indexY) GetOriginIndex()
+        {
+            return (indexX: this.originIndexX, indexY: this.originIndexY);
+        }
+
+        public Direction GetDirection()
+        {
+            return this.direction;
+        }
+
         public void SetOriginIndex(int originIndexX, int originIndexY)
         {
             this.originIndexX = originIndexX;
@@ -94,6 +114,8 @@ namespace Networking.Battleship.GameLogic
 
         public void SetDirection(Direction direction)
         {
+            this.direction = direction;
+
             switch (direction)
             {
                 case Direction.UP:

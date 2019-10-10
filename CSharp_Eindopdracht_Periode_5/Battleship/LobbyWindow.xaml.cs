@@ -23,8 +23,9 @@ namespace Battleship
     public partial class LobbyWindow : Window, IServerMessageReceiver
     {
         private BattleshipClient battleshipClient;
-        private string sesionName;
+        private string sessionName;
         private string sessionId;
+        private bool isHost;
 
         private bool isReady;
 
@@ -35,9 +36,10 @@ namespace Battleship
             this.battleshipClient = battleshipClient;
             this.battleshipClient.SetMessageReceiver(this);
 
-            this.sesionName = sessionName;
+            this.sessionName = sessionName;
             this.sessionId = sessionId;
-            con_Players.Header += this.sesionName;
+            this.isHost = isHost;
+            con_Players.Header += this.sessionName;
 
             this.isReady = false;
 
@@ -189,7 +191,7 @@ namespace Battleship
                         {
                             if (message.GetState() == Message.State.OK)
                             {
-                                MainWindow gameWindow = new MainWindow(this.battleshipClient);
+                                MainWindow gameWindow = new MainWindow(this.battleshipClient, this.sessionName, this.sessionId, this.isHost);
                                 gameWindow.Show();
                                 this.Close();
                             }

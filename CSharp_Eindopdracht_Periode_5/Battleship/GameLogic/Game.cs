@@ -1,14 +1,17 @@
 ﻿using Battleship.Assets;
 using Battleship.GameObjects;
 using Battleship.GameObjects.Water;
+using Battleship.Net;
 using MLlib;
 using Networking.Battleship;
+using Networking.Battleship.GameLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -37,15 +40,19 @@ namespace Battleship.GameLogic
         private int currentShipsIndex;
         private bool isInSetup;
 
-        public Game(Dispatcher dispatcher, ref Viewport3D viewport)
+        private BattleshipClient battleshipClient;
+
+        public Game(Dispatcher dispatcher, ref Viewport3D viewport, BattleshipClient battleshipClient)
         {
-            this.isInSetup = true;
-            this.currentShipsIndex = 0;
-            this.ships = new List<Ship>();
             this.timing = Timing.GetInstance();
             this.mainDispatcher = dispatcher;
             this.world = new World(this, ref viewport);
             this.isRunning = false;
+
+            this.battleshipClient = battleshipClient;
+            this.ships = new List<Ship>();
+            this.currentShipsIndex = 0;
+            this.isInSetup = true;
 
             //PerspectiveCamera camera = new PerspectiveCamera();
             //camera.Position = new Point3D(0, 2, 10);
@@ -59,18 +66,20 @@ namespace Battleship.GameLogic
             directionalLight.Direction = new Vector3D(0, -1, -1);
             this.world.AddLight(directionalLight);
 
-            GameObject gameObject = new GameObject(this);
-            gameObject.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.AircraftCarrierModel));
-            gameObject.Material = new DiffuseMaterial(Brushes.Blue);
-            this.world.AddGameObject(gameObject);
+            //Ship gameObject = new Ship(this, 5);
+            //gameObject.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.AircraftCarrierModel));
+            //gameObject.Material = new DiffuseMaterial(Brushes.Blue);
+            //this.world.AddGameObject(gameObject);
 
             //SetupWater();
             SetupGrids();
-            this.playerGrid.Ship = gameObject;
+            //this.playerGrid.Ship = gameObject;
 
             SetupShips();
             this.ships[0].Scaling = new Vector3D(1, 1, 1);
             this.playerGrid.Ship = this.ships[0];
+
+            GameInput.KeyUp += OnKeyUp;
         }
 
         public void SetupShips()
@@ -118,20 +127,49 @@ namespace Battleship.GameLogic
             this.enemyGrid.Marker.Position = new Vector3D(enemyGrid.Position.X - 4.5, enemyGrid.Position.Y, enemyGrid.Position.Z - 4.5);
             this.world.AddGameObject(enemyGrid.Marker);
             this.world.AddGameObject(enemyGrid);
+            this.enemyGrid.IsActive = false;
         }
 
-        private void OnKeyUp(Key key)
+        public void OnKeyUp(Key key)
         {
             if (key == Key.Enter)
             {
-                if (this.playerGrid.GetBattleshipGrid().CheckGridObjectPlacement(this.ships[this.currentShipsIndex].GetGridObject()))
+                if(this.isInSetup)
                 {
-                    this.playerGrid.Ship = null;
-                    currentShipsIndex++;
-                }
-                if (currentShipsIndex == this.ships.Count())
-                {
+                    if (this.playerGrid.GetBattleshipGrid().CheckGridObjectPlacement(this.ships[this.currentShipsIndex].GridObject))
+                    {
+                        currentShipsIndex++;
+                        if(currentShipsIndex != this.ships.Count())
+                        {
+                            this.playerGrid.Ship = this.ships[this.currentShipsIndex];
+                            this.playerGrid.Ship.Scaling = new Vector3D(1, 1, 1);
+                        }
+                    }
+                    if (currentShipsIndex == this.ships.Count())
+                    {
+                        this.playerGrid.Ship = null;
 
+                        List<byte> bytes = new List<byte>();
+
+                        foreach(Ship ship in this.ships)
+                        {
+                            GridObject gridObject = ship.GridObject;
+                            bytes.AddRange(new byte[3] { (byte)gridObject.GetOriginIndex().indexX,(byte)gridObject.GetOriginIndex().indexY, (byte)gridObject.GetDirection() });
+                        }
+
+                        this.battleshipClient.Transmit(new Message(Message.ID.SUBMIT_BOATS, Message.State.NONE, bytes.ToArray()));
+                        GameInput.KeyUp -= OnKeyUp;
+                    }
+                }
+                else
+                {
+                    List<byte> bytes = new List<byte>();
+                    bytes.Add((byte)this.playerGrid.GetIndex().X);
+                    bytes.Add((byte)this.playerGrid.GetIndex().Y);
+                    bytes.AddRange(Encoding.UTF8.GetBytes(UserLogin.Username));
+
+                    GameInput.KeyUp -= OnKeyUp;
+                    this.battleshipClient.Transmit(new Message(Message.ID.SUBMIT_MOVE, Message.State.NONE, bytes.ToArray()));
                 }
             }
         }
@@ -147,10 +185,9 @@ namespace Battleship.GameLogic
                         if (message.GetState() == Message.State.OK)
                         {
                             this.isInSetup = false;
-                        }
-                        else if (message.GetState() == Message.State.ERROR)
-                        {
-
+                            this.playerGrid.IsActive = false;
+                            this.enemyGrid.IsActive = true;
+                            GameInput.KeyUp += OnKeyUp;
                         }
                         break;
                     }
@@ -158,7 +195,30 @@ namespace Battleship.GameLogic
                     {
                         if (message.GetState() == Message.State.OK)
                         {
-                            this.playerGrid.
+                            int indexX = content[0];
+                            int indexY = content[1];
+                            bool isHit = (content[2] == 1);
+                            string username = Encoding.UTF8.GetString(content.GetRange(3, content.Count - 3).ToArray());
+
+                            Point3D position = new Point3D(0, 0, 0);
+                            BattleshipGrid battleshipGrid = (UserLogin.Username == username) ? this.playerGrid.GetBattleshipGrid() : this.enemyGrid.GetBattleshipGrid();
+
+                            position = battleshipGrid.GetWorldPosition(indexX, indexY);
+                            battleshipGrid.ExecuteMove(indexX, indexY);
+
+                            GameObject pin = new GameObject(this);
+                            pin.Position = new Vector3D(position.X, position.Y, position.Z);
+                            pin.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.PinModel));
+                            pin.Material = new DiffuseMaterial((isHit) ? Brushes.Red : Brushes.White);
+                            this.world.AddGameObject(pin);
+
+                            if(isHit)
+                                GameInput.KeyUp += OnKeyUp;
+                        }
+                        else if(message.GetState() == Message.State.ERROR)
+                        {
+                            MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
+                            GameInput.KeyUp += OnKeyUp;
                         }
                         break;
                     }

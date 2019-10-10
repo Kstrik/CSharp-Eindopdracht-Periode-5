@@ -27,15 +27,22 @@ namespace Battleship
         private BattleshipClient battleshipClient;
 
         private Game game;
+        private string sessionName;
+        private string sessionId;
+        private bool isHost;
 
-        public MainWindow(BattleshipClient battleshipClient)
+        public MainWindow(BattleshipClient battleshipClient, string sessionName, string sessionId, bool isHost)
         {
             InitializeComponent();
 
             this.battleshipClient = battleshipClient;
             this.battleshipClient.SetMessageReceiver(this);
 
-            this.game = new Game(Application.Current.Dispatcher, ref vwp);
+            this.sessionName = sessionName;
+            this.sessionId = sessionId;
+            this.isHost = isHost;
+
+            this.game = new Game(Application.Current.Dispatcher, ref vwp, this.battleshipClient);
 
             //this.Closing += MainWindow_Closing;
             this.game.Start();
@@ -45,8 +52,6 @@ namespace Battleship
             this.MouseUp += MainWindow_MouseUp;
             this.MouseMove += MainWindow_MouseMove;
             //grid = new Battleship.GameObjects.Grid(this.game);
-
-            GameInput.KeyUp += OnKeyUp;
 
             //this.Cursor = Cursors.None;
         }
@@ -139,32 +144,21 @@ namespace Battleship
                                 MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
                             break;
                         }
-                    case Message.ID.SUBMIT_BOATS:
-                        {
-                            if(message.GetState() == Message.State.OK)
-                            {
-
-                            }
-                            break;
-                        }
-                    case Message.ID.START_MATCH:
+                    case Message.ID.END_GAME:
                         {
                             if (message.GetState() == Message.State.OK)
                             {
-
-                            }
-                            break;
-                        }
-                    case Message.ID.SUBMIT_MOVE:
-                        {
-                            if (message.GetState() == Message.State.OK)
-                            {
-
+                                this.game.Stop();
+                                MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
+                                LobbyWindow lobbyWindow = new LobbyWindow(this.battleshipClient, this.sessionName, this.sessionId, this.isHost);
+                                lobbyWindow.Show();
+                                this.Close();
                             }
                             break;
                         }
                     default:
                         {
+                            this.game.HandleMessage(message);
                             break;
                         }
                 }
