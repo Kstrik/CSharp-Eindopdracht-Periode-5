@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Battleship.GameObjects
+namespace Battleship.Net
 {
-    class Node
+    public class Player
     {
-        bool isOccupied;
-        bool isHit;
-        Point position;
+        public string Username { get; set; }
+        public string UserId { get; set; }
 
-        public Node(bool isOccupied, bool isHit, Point position)
+        public Player(string username, string userId)
         {
-            this.isOccupied = isOccupied;
-            this.isHit = isHit;
-            this.position = position;
+            this.Username = username;
+            this.UserId = userId;
         }
 
         public Point GetPosition()

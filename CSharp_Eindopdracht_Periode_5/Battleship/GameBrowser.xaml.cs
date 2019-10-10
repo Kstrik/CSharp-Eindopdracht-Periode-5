@@ -24,12 +24,18 @@ namespace Battleship
     {
         private BattleshipClient battleshipClient;
 
+        private string joinSessionIdCache;
+
         public GameBrowser(BattleshipClient battleshipClient)
         {
             InitializeComponent();
 
             this.battleshipClient = battleshipClient;
             this.battleshipClient.SetMessageReceiver(this);
+
+            this.joinSessionIdCache = "";
+
+            this.battleshipClient.Transmit(new Message(Message.ID.GET_SESSIONS, Message.State.NONE, null));
         }
 
         public void OnMessageReceived(Message message)
@@ -44,7 +50,8 @@ namespace Battleship
                         {
                             string sessionId = Encoding.UTF8.GetString(content.GetRange(0, 32).ToArray());
                             string sessionName = Encoding.UTF8.GetString(content.GetRange(32, content.Count - 33).ToArray());
-                            int playerCount = int.Parse(Encoding.UTF8.GetString(content.GetRange(content.Count - 1, 1).ToArray()));
+                            //int playerCount = int.Parse(Encoding.UTF8.GetString(content.GetRange(content.Count - 1, 1).ToArray()));
+                            int playerCount = content.Last();
 
                             SessionListItem sessionListItem = new SessionListItem(JoinSession);
                             sessionListItem.SessionName = sessionName;
@@ -83,7 +90,7 @@ namespace Battleship
                     case Message.ID.ADD_SESSION:
                         {
                             if (message.GetState() == Message.State.OK)
-                                ShowLobby(txb_SessionName.Text);
+                                ShowLobby(txb_SessionName.Text, true);
                             else if (message.GetState() == Message.State.ERROR)
                             {
                                 txb_SessionName.IsEnabled = true;
@@ -97,14 +104,36 @@ namespace Battleship
                     case Message.ID.JOIN_SESSION:
                         {
                             if (message.GetState() == Message.State.OK)
-                                ShowLobby(Encoding.UTF8.GetString(content.ToArray()));
+                                ShowLobby(Encoding.UTF8.GetString(content.ToArray()), false);
                             else if (message.GetState() == Message.State.ERROR)
                             {
+                                this.joinSessionIdCache = "";
                                 txb_SessionName.IsEnabled = true;
                                 btn_Refresh.IsEnabled = true;
                                 btn_Logout.IsEnabled = true;
                                 btn_HostSession.IsEnabled = true;
                                 MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
+                            }
+                            break;
+                        }
+                    case Message.ID.REMOVE_SESSION:
+                        {
+                            if (message.GetState() == Message.State.OK)
+                            {
+                                string sessionId = Encoding.UTF8.GetString(content.ToArray());
+
+                                SessionListItem existingControl = null;
+                                foreach (SessionListItem control in con_Sessions.Children)
+                                {
+                                    if (control.SessionId == sessionId)
+                                    {
+                                        existingControl = control;
+                                        break;
+                                    }
+                                }
+
+                                if (existingControl != null)
+                                    con_Sessions.Children.Remove(existingControl);
                             }
                             break;
                         }
@@ -126,6 +155,7 @@ namespace Battleship
         {
             this.battleshipClient.Transmit(new Message(Message.ID.LOGOUT, Message.State.NONE, null));
 
+            UserLogin.Username = "";
             AuthorizationWindow authorizationWindow = new AuthorizationWindow(this.battleshipClient);
             authorizationWindow.Show();
             this.Close();
@@ -147,6 +177,7 @@ namespace Battleship
 
         private void JoinSession(string sessionId)
         {
+            this.joinSessionIdCache = sessionId;
             this.battleshipClient.Transmit(new Message(Message.ID.JOIN_SESSION, Message.State.NONE, Encoding.UTF8.GetBytes(sessionId)));
             txb_SessionName.IsEnabled = false;
             btn_Refresh.IsEnabled = false;
@@ -154,9 +185,11 @@ namespace Battleship
             btn_HostSession.IsEnabled = false;
         }
 
-        private void ShowLobby(string sessionName)
+        private void ShowLobby(string sessionName, bool isHost)
         {
-            MessageBox.Show(sessionName);
+            LobbyWindow lobbyWindow = new LobbyWindow(this.battleshipClient, sessionName, this.joinSessionIdCache, isHost);
+            lobbyWindow.Show();
+            this.Close();
         }
     }
 }

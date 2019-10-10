@@ -1,4 +1,5 @@
-﻿using Battleship.GameLogic;
+﻿using Battleship.Assets;
+using Battleship.GameLogic;
 using MLlib;
 using MLlib.Vectors;
 using System;
@@ -25,6 +26,8 @@ namespace Battleship.GameObjects.Water
         private float time;
         private int vertexesCount;
 
+        int frameCounter = 0;
+
         public Water(Game game) 
             : base(game)
         {
@@ -35,8 +38,8 @@ namespace Battleship.GameObjects.Water
             this.waveB = new Vector4D(0.0f, 1.0f, 0.12f, 2.5f);
             this.waveC = new Vector4D(0.5f, 1.0f, 0.12f, 1f);
 
-            this.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(@"C:\Users\Kenley Strik\Desktop\GridPlane.obj"));
-            this.Material = new System.Windows.Media.Media3D.DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(@"C:\Users\Kenley Strik\Desktop\1.jpg", UriKind.Absolute))));
+            this.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.WaterTileModel));
+            this.Material = new System.Windows.Media.Media3D.DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(Asset.WaterImage, UriKind.Absolute))));
 
             this.orignalPositions = new System.Windows.Media.Media3D.Point3DCollection();
             this.orignalNormals = new System.Windows.Media.Media3D.Vector3DCollection();
@@ -60,21 +63,28 @@ namespace Battleship.GameObjects.Water
         {
             base.Update(deltatime);
 
-            this.time += deltatime / 2;
+            this.time += deltatime / 16;
             if (this.time >= 100.0f)
             {
                 this.time = 0;
             }
 
-            for (int i = 0; i < this.vertexesCount; i++)
-            {
-                Vertex vertex = new Vertex(new Vector3D((float)this.orignalPositions[i].X, (float)this.orignalPositions[i].Y, (float)this.orignalPositions[i].Z),
-                                            null,
-                                            new Vector3D((float)this.orignalNormals[i].X, (float)this.orignalNormals[i].Y, (float)this.orignalNormals[i].Z));
+            this.frameCounter++;
+            if (this.frameCounter == 17)
+                this.frameCounter = 0;
 
-                CalucluateVertexPosition(vertex, time);
-                this.mesh.Positions[i] = new System.Windows.Media.Media3D.Point3D(vertex.Vertice.X, vertex.Vertice.Y, vertex.Vertice.Z);
-                //this.waterPlane.GetMesh().Normals[i] = new System.Windows.Media.Media3D.Vector3D(vertex.Normal.X, vertex.Normal.Y, vertex.Normal.Z);
+            if(this.frameCounter == 16)
+            {
+                for (int i = 0; i < this.vertexesCount; i++)
+                {
+                    Vertex vertex = new Vertex(new Vector3D((float)this.orignalPositions[i].X, (float)this.orignalPositions[i].Y, (float)this.orignalPositions[i].Z),
+                                                null,
+                                                new Vector3D((float)this.orignalNormals[i].X, (float)this.orignalNormals[i].Y, (float)this.orignalNormals[i].Z));
+
+                    CalucluateVertexPosition(vertex, time);
+                    this.mesh.Positions[i] = new System.Windows.Media.Media3D.Point3D(vertex.Vertice.X, vertex.Vertice.Y, vertex.Vertice.Z);
+                    //this.waterPlane.GetMesh().Normals[i] = new System.Windows.Media.Media3D.Vector3D(vertex.Normal.X, vertex.Normal.Y, vertex.Normal.Z);
+                }
             }
         }
 

@@ -18,10 +18,13 @@ namespace Battleship_Server.Net
         public bool IsAuthorized { get { return this.isAuthorized; } }
         private bool isAuthorized;
 
+        public bool IsReady;
+
         public Player(ClientConnection clientConnection)
         {
             this.clientConnection = clientConnection;
             this.isAuthorized = false;
+            this.IsReady = false;
         }
 
         public bool Register(string username, string password)
@@ -42,7 +45,18 @@ namespace Battleship_Server.Net
 
         public void Logout()
         {
+            this.username = "";
             this.isAuthorized = false;
+        }
+
+        public byte[] GetBytes()
+        {
+            List<byte> bytes = new List<byte>();
+            bytes.Add((byte)((this.Session.GetHost() == this) ? 1 : 0));
+            bytes.Add((byte)((this.IsReady) ? 1 : 0));
+            bytes.AddRange(Encoding.UTF8.GetBytes(this.username));
+
+            return bytes.ToArray();
         }
 
         public ClientConnection GetConnection()

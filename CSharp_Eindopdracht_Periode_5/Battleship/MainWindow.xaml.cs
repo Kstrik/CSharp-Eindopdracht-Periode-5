@@ -95,21 +95,20 @@ namespace Battleship
                     break;
             }
         }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.game.Stop();
+        }
+
+        private void StartGame_Click(object sender, RoutedEventArgs e)
+        {
+            this.game.Start();
+        }
+
+        private void StopGame_Click(object sender, RoutedEventArgs e)
+        {
+            this.game.Stop();
+        }
     }
 }
-
-        //private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        //{
-        //    this.game.Stop();
-        //}
-
-        //private void StartGame_Click(object sender, RoutedEventArgs e)
-        //{
-        //    this.game.Start();
-        //}
-
-        //private void StopGame_Click(object sender, RoutedEventArgs e)
-        //{
-        //    this.game.Stop();
-        //}
-        

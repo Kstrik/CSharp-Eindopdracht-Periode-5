@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="Battleship.PlayerListItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Battleship"
+             mc:Ignorable="d">
+    <Grid Background="{Binding Parent.Background, RelativeSource={RelativeSource Mode=Self}}">
+        <Label Content="{Binding Parent.Parent.Username, RelativeSource={RelativeSource Mode=Self}}" Foreground="{Binding Parent.Parent.Foreground, RelativeSource={RelativeSource Mode=Self}}" Margin="{Binding Parent.Parent.InnerMargin, RelativeSource={RelativeSource Mode=Self}}" HorizontalAlignment="Left" VerticalAlignment="Top"></Label>
+        <WrapPanel HorizontalAlignment="Right">
+            <Label x:Name="lbl_Ready" Content="Not ready" Foreground="Red" Margin="{Binding Parent.Parent.Parent.InnerMargin, RelativeSource={RelativeSource Mode=Self}}"></Label>
+            <Label x:Name="lbl_Host" Foreground="{Binding Parent.Parent.Parent.Foreground, RelativeSource={RelativeSource Mode=Self}}" Margin="{Binding Parent.Parent.Parent.InnerMargin, RelativeSource={RelativeSource Mode=Self}}"></Label>
+        </WrapPanel>
+    </Grid>
+</UserControl>

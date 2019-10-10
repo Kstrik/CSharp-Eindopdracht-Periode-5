@@ -66,6 +66,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GameLogic\GamePlayer.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -74,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Net\Authorizer.cs" />
     <Compile Include="Net\BattleshipServer.cs" />
+    <Compile Include="GameLogic\Game.cs" />
     <Compile Include="Net\Player.cs" />
     <Compile Include="Net\Session.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

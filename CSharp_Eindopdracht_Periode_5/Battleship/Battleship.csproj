@@ -56,6 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Assets\Asset.cs" />
     <Compile Include="AuthorizationWindow.xaml.cs">
       <DependentUpon>AuthorizationWindow.xaml</DependentUpon>
     </Compile>
@@ -65,18 +66,22 @@
     </Compile>
     <Compile Include="GameLogic\GameCamera.cs" />
     <Compile Include="GameLogic\GameInput.cs" />
-    <Compile Include="GameObjects\Grid.cs" />
-    <Compile Include="GameObjects\Node.cs" />
+    <Compile Include="GameObjects\SelectionGrid.cs" />
     <Compile Include="GameObjects\Water\Water.cs" />
     <Compile Include="LobbyWindow.xaml.cs">
       <DependentUpon>LobbyWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Net\BattleshipClient.cs" />
     <Compile Include="Net\IServerMessageReceiver.cs" />
+    <Compile Include="Net\Player.cs" />
+    <Compile Include="PlayerListItem.xaml.cs">
+      <DependentUpon>PlayerListItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SessionListItem.xaml.cs">
       <DependentUpon>SessionListItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="GameLogic\World.cs" />
+    <Compile Include="UserLogin.cs" />
     <Page Include="AuthorizationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -105,6 +110,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PlayerListItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SessionListItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -127,9 +136,12 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Assets\GridPlane.obj" />
-    <None Include="Assets\Highlighter.obj" />
+    <None Include="Assets\Models\AircraftCarrier.obj" />
+    <None Include="Assets\Models\GridPlane.obj" />
+    <None Include="Assets\Models\Highlighter.obj" />
+    <None Include="Assets\Models\WaterTile.obj" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -149,14 +161,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\gird.png" />
+    <Resource Include="Assets\Images\Grid.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Battleship.png" />
-    <Resource Include="Assets\Carrier.png" />
-    <Resource Include="Assets\Cruiser.png" />
-    <Resource Include="Assets\Destroyer.png" />
-    <Resource Include="Assets\Sub.png" />
+    <Resource Include="Assets\Images\Battleship.png" />
+    <Resource Include="Assets\Images\Carrier.png" />
+    <Resource Include="Assets\Images\Cruiser.png" />
+    <Resource Include="Assets\Images\Destroyer.png" />
+    <Resource Include="Assets\Images\Sub.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Water.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

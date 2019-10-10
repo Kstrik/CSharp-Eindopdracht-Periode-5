@@ -32,11 +32,11 @@ namespace Battleship.GameLogic
             : base(game)
         {
             this.camera = new PerspectiveCamera();
-            this.camera.Position = new Point3D(0, 2, 10);
+            this.camera.Position = new Point3D(0, 10, 20);
             this.camera.FieldOfView = 60;
 
             this.yaw = -90.0f;
-            this.pitch = 0.0f;
+            this.pitch = -25.0f;
             this.speed = 5f;
             this.sensitivity = 0.1f;
 
@@ -46,6 +46,8 @@ namespace Battleship.GameLogic
             this.front = new Vector3D(0, 0, -1);
             this.up = new Vector3D(0, 1, 0);
             this.right = new Vector3D(1, 0, 0);
+
+            UpdateVectors();
 
             GameInput.KeyDown += OnKeyDown;
             GameInput.KeyUp += OnKeyUp;
