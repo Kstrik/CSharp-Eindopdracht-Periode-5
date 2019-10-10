@@ -59,6 +59,7 @@
         <local:Container Header="Options" Grid.Column="2" Background="#FF1E1E1E" Foreground="#FF2D2D30" HeaderForeground="White" FontSize="12" Margin="2,2,2,2">
             <Button x:Name="btn_ReadyToggle" Content="Ready" Height="30" Style="{StaticResource ButtonStyle}" Template="{DynamicResource ButtonControlTemplate}" Margin="5,5,5,5" Click="ReadyToggle_Click"></Button>
             <Button x:Name="btn_Leave" Content="Leave" Height="30" Style="{StaticResource ButtonStyle}" Template="{DynamicResource ButtonControlTemplate}" Margin="5,0,5,5" Click="Leave_Click"></Button>
+            <Button x:Name="btn_StartGame" Content="Start" Height="30" Style="{StaticResource ButtonStyle}" Template="{DynamicResource ButtonControlTemplate}" Margin="5,0,5,5" Click="Startgame_Click"></Button>
         </local:Container>
         <local:Container Header="Chat" Grid.Column="2" Grid.Row="1" Background="#FF1E1E1E" Foreground="#FF2D2D30" HeaderForeground="White" FontSize="12" Margin="2,2,2,2">
             <TextBox x:Name="txb_Chat" Foreground="White" Background="#FF2D2D30" Margin="5,5,5,0" FontSize="12" BorderBrush="#FF686868" Height="90" IsReadOnly="True"></TextBox>

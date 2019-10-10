@@ -90,7 +90,7 @@ namespace Battleship
                     case Message.ID.ADD_SESSION:
                         {
                             if (message.GetState() == Message.State.OK)
-                                ShowLobby(txb_SessionName.Text);
+                                ShowLobby(txb_SessionName.Text, true);
                             else if (message.GetState() == Message.State.ERROR)
                             {
                                 txb_SessionName.IsEnabled = true;
@@ -104,7 +104,7 @@ namespace Battleship
                     case Message.ID.JOIN_SESSION:
                         {
                             if (message.GetState() == Message.State.OK)
-                                ShowLobby(Encoding.UTF8.GetString(content.ToArray()));
+                                ShowLobby(Encoding.UTF8.GetString(content.ToArray()), false);
                             else if (message.GetState() == Message.State.ERROR)
                             {
                                 this.joinSessionIdCache = "";
@@ -185,9 +185,9 @@ namespace Battleship
             btn_HostSession.IsEnabled = false;
         }
 
-        private void ShowLobby(string sessionName)
+        private void ShowLobby(string sessionName, bool isHost)
         {
-            LobbyWindow lobbyWindow = new LobbyWindow(this.battleshipClient, sessionName, this.joinSessionIdCache);
+            LobbyWindow lobbyWindow = new LobbyWindow(this.battleshipClient, sessionName, this.joinSessionIdCache, isHost);
             lobbyWindow.Show();
             this.Close();
         }

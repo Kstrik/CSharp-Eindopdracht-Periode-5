@@ -63,6 +63,21 @@ namespace Battleship
         }
         private bool isHost;
 
+        public bool IsReady
+        {
+            get
+            {
+                return this.isReady;
+            }
+            set
+            {
+                this.isReady = value;
+                lbl_Ready.Content = (this.isReady) ? "Ready" : "Not ready";
+                lbl_Ready.Foreground = (this.isReady) ? Brushes.Green : Brushes.Red;
+            }
+        }
+        private bool isReady;
+
         public PlayerListItem()
         {
             InitializeComponent();

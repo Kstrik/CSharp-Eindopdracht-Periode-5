@@ -30,7 +30,7 @@ namespace Battleship
 
         private List<Player> players;
 
-        public LobbyWindow(BattleshipClient battleshipClient, string sessionName, string sessionId)
+        public LobbyWindow(BattleshipClient battleshipClient, string sessionName, string sessionId, bool isHost)
         {
             InitializeComponent();
 
@@ -44,6 +44,9 @@ namespace Battleship
             this.isReady = false;
 
             this.players = new List<Player>();
+
+            if (!isHost)
+                btn_StartGame.Visibility = Visibility.Collapsed;
 
             this.battleshipClient.Transmit(new Message(Message.ID.GET_PLAYERS, Message.State.NONE, null));
         }
@@ -59,11 +62,13 @@ namespace Battleship
                     case Message.ID.PLAYERDATA:
                         {
                             bool isHost = (content[0] == 1);
-                            string username = Encoding.UTF8.GetString(content.GetRange(1, content.Count - 1).ToArray());
+                            bool isReady = (content[1] == 1);
+                            string username = Encoding.UTF8.GetString(content.GetRange(2, content.Count - 2).ToArray());
 
                             PlayerListItem playerListItem = new PlayerListItem();
                             playerListItem.Username = username;
                             playerListItem.IsHost = isHost;
+                            playerListItem.IsReady = isReady;
                             playerListItem.Foreground = Brushes.White;
 
                             if (con_Players.Children.Count == 0)
@@ -101,22 +106,36 @@ namespace Battleship
                         {
                             if(message.GetState() == Message.State.OK)
                             {
-                                this.isReady = true;
-                                btn_ReadyToggle.Content = "Unready";
+                                string username = Encoding.UTF8.GetString(content.ToArray());
+
+                                if (username == UserLogin.Username)
+                                {
+                                    this.isReady = true;
+                                    btn_ReadyToggle.Content = "Unready";
+                                }
+
+                                SetReadyForUser(username, true);
                             }
                             else if (message.GetState() == Message.State.ERROR)
-                                MessageBox.Show("Could not ready up!");
+                                MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
                             break;
                         }
                     case Message.ID.UNREADY:
                         {
                             if (message.GetState() == Message.State.OK)
                             {
-                                this.isReady = false;
-                                btn_ReadyToggle.Content = "Ready";
+                                string username = Encoding.UTF8.GetString(content.ToArray());
+
+                                if (username == UserLogin.Username)
+                                {
+                                    this.isReady = false;
+                                    btn_ReadyToggle.Content = "Ready";
+                                }
+
+                                SetReadyForUser(username, false);
                             }
                             else if (message.GetState() == Message.State.ERROR)
-                                MessageBox.Show("Could not unready!");
+                                MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
                             break;
                         }
                     case Message.ID.CHAT_MESSAGE:
@@ -131,7 +150,7 @@ namespace Battleship
                                 txb_Chat.ScrollToEnd();
                             }
                             else if (message.GetState() == Message.State.ERROR)
-                                MessageBox.Show("Error receiving chat message!");
+                                MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
                             break;
                         }
                     case Message.ID.REMOVE_SESSION:
@@ -170,6 +189,16 @@ namespace Battleship
                             }
                             break;
                         }
+                    case Message.ID.START_GAME:
+                        {
+                            if (message.GetState() == Message.State.OK)
+                            {
+                                MessageBox.Show("Game started!");
+                            }
+                            else
+                                MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
+                            break;
+                        }
                     default:
                         {
                             break;
@@ -194,6 +223,14 @@ namespace Battleship
             this.Close();
         }
 
+        private void Startgame_Click(object sender, RoutedEventArgs e)
+        {
+            this.battleshipClient.Transmit(new Message(Message.ID.START_GAME, Message.State.NONE, null));
+            //GameBrowser gameBrowser = new GameBrowser(this.battleshipClient);
+            //gameBrowser.Show();
+            //this.Close();
+        }
+
         private void SendMessage_Click(object sender, RoutedEventArgs e)
         {
             if(!String.IsNullOrEmpty(txb_ChatMessage.Text))
@@ -205,6 +242,18 @@ namespace Battleship
 
                 this.battleshipClient.Transmit(new Message(Message.ID.CHAT_MESSAGE, Message.State.NONE, bytes.ToArray()));
                 txb_ChatMessage.Text = "";
+            }
+        }
+
+        private void SetReadyForUser(string username, bool isReady)
+        {
+            foreach (PlayerListItem control in con_Players.Children)
+            {
+                if (control.Username == username)
+                {
+                    control.IsReady = isReady;
+                    break;
+                }
             }
         }
     }

@@ -53,6 +53,7 @@ namespace Battleship_Server.Net
         {
             List<byte> bytes = new List<byte>();
             bytes.Add((byte)((this.Session.GetHost() == this) ? 1 : 0));
+            bytes.Add((byte)((this.IsReady) ? 1 : 0));
             bytes.AddRange(Encoding.UTF8.GetBytes(this.username));
 
             return bytes.ToArray();

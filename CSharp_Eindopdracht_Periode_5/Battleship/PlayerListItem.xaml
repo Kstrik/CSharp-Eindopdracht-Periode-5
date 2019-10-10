@@ -8,6 +8,7 @@
     <Grid Background="{Binding Parent.Background, RelativeSource={RelativeSource Mode=Self}}">
         <Label Content="{Binding Parent.Parent.Username, RelativeSource={RelativeSource Mode=Self}}" Foreground="{Binding Parent.Parent.Foreground, RelativeSource={RelativeSource Mode=Self}}" Margin="{Binding Parent.Parent.InnerMargin, RelativeSource={RelativeSource Mode=Self}}" HorizontalAlignment="Left" VerticalAlignment="Top"></Label>
         <WrapPanel HorizontalAlignment="Right">
+            <Label x:Name="lbl_Ready" Content="Not ready" Foreground="Red" Margin="{Binding Parent.Parent.Parent.InnerMargin, RelativeSource={RelativeSource Mode=Self}}"></Label>
             <Label x:Name="lbl_Host" Foreground="{Binding Parent.Parent.Parent.Foreground, RelativeSource={RelativeSource Mode=Self}}" Margin="{Binding Parent.Parent.Parent.InnerMargin, RelativeSource={RelativeSource Mode=Self}}"></Label>
         </WrapPanel>
     </Grid>

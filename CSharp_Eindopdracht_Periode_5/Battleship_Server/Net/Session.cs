@@ -82,6 +82,8 @@ namespace Battleship_Server.Net
                     {
                         if(player.IsAuthorized)
                             Broadcast(new Message(Message.ID.CHAT_MESSAGE, Message.State.OK, content.ToArray()));
+                        else
+                            this.battleshipServer.Transmit(new Message(Message.ID.READY, Message.State.ERROR, Encoding.UTF8.GetBytes("Error transmitting chat message!")), player.GetConnection());
                         break;
                     }
                 case Message.ID.GET_PLAYERS:
@@ -98,8 +100,11 @@ namespace Battleship_Server.Net
                         if (player.IsAuthorized && this.game == null)
                         {
                             player.IsReady = true;
-                            this.battleshipServer.Transmit(new Message(Message.ID.READY, Message.State.OK, null), player.GetConnection());
+                            //this.battleshipServer.Transmit(new Message(Message.ID.READY, Message.State.OK, null), player.GetConnection());
+                            Broadcast(new Message(Message.ID.READY, Message.State.OK, Encoding.UTF8.GetBytes(player.GetUsername())));
                         }
+                        else
+                            this.battleshipServer.Transmit(new Message(Message.ID.READY, Message.State.ERROR, Encoding.UTF8.GetBytes("Could not ready up!")), player.GetConnection());
                         break;
                     }
                 case Message.ID.UNREADY:
@@ -107,16 +112,24 @@ namespace Battleship_Server.Net
                         if (player.IsAuthorized && this.game == null)
                         {
                             player.IsReady = false;
-                            this.battleshipServer.Transmit(new Message(Message.ID.UNREADY, Message.State.OK, null), player.GetConnection());
+                            //this.battleshipServer.Transmit(new Message(Message.ID.UNREADY, Message.State.OK, null), player.GetConnection());
+                            Broadcast(new Message(Message.ID.UNREADY, Message.State.OK, Encoding.UTF8.GetBytes(player.GetUsername())));
                         }
+                        else
+                            this.battleshipServer.Transmit(new Message(Message.ID.UNREADY, Message.State.ERROR, Encoding.UTF8.GetBytes("Could not unready!")), player.GetConnection());
                         break;
                     }
                 case Message.ID.START_GAME:
                     {
                         if (player.IsAuthorized && this.host == player && this.game == null)
                         {
-                            this.game = new Game(new GamePlayer(this.players[0]), new GamePlayer(this.players[1]), this, this.battleshipServer);
-                            Broadcast(new Message(Message.ID.START_GAME, Message.State.OK, null));
+                            if (this.players.Where(p => p.IsReady == false).Count() == 0)
+                            {
+                                this.game = new Game(new GamePlayer(this.players[0]), new GamePlayer(this.players[1]), this, this.battleshipServer);
+                                Broadcast(new Message(Message.ID.START_GAME, Message.State.OK, null));
+                            }
+                            else
+                                this.battleshipServer.Transmit(new Message(Message.ID.START_GAME, Message.State.ERROR, Encoding.UTF8.GetBytes("Not all players are ready!")), player.GetConnection());
                         }
                         break;
                     }
@@ -162,7 +175,7 @@ namespace Battleship_Server.Net
         public void BroadcastPlayers()
         {
             foreach (Player playerInSession in this.players)
-                Broadcast(new Message(Message.ID.PLAYERDATA, Message.State.OK,playerInSession.GetBytes()));
+                Broadcast(new Message(Message.ID.PLAYERDATA, Message.State.OK, playerInSession.GetBytes()));
         }
 
         public byte[] GetBytes()
