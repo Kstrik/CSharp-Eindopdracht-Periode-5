@@ -46,6 +46,7 @@ namespace Battleship
             this.MouseMove += MainWindow_MouseMove;
             //grid = new Battleship.GameObjects.Grid(this.game);
 
+            GameInput.KeyUp += OnKeyUp;
 
             //this.Cursor = Cursors.None;
         }
@@ -66,7 +67,7 @@ namespace Battleship
 
         private void MainWindow_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if(!txb_ChatMessage.IsFocused)
+            if(!txb_ChatMessage.IsKeyboardFocused)
                 GameInput.OnMouseUp(e.ChangedButton, e.GetPosition(vwp));
         }
 
@@ -181,14 +182,6 @@ namespace Battleship
 
                 this.battleshipClient.Transmit(new Message(Message.ID.CHAT_MESSAGE, Message.State.NONE, bytes.ToArray()));
                 txb_ChatMessage.Text = "";
-            }
-        }
-
-        private void OnKeyUp(Key key)
-        {
-            if(key == Key.Enter)
-            {
-
             }
         }
     }

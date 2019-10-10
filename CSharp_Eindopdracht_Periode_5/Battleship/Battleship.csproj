@@ -138,8 +138,13 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Assets\Models\AircraftCarrier.obj" />
+    <None Include="Assets\Models\Battleship.obj" />
+    <None Include="Assets\Models\Cruiser.obj" />
+    <None Include="Assets\Models\Destroyer.obj" />
     <None Include="Assets\Models\GridPlane.obj" />
     <None Include="Assets\Models\Highlighter.obj" />
+    <None Include="Assets\Models\Pin.obj" />
+    <None Include="Assets\Models\Submarine.obj" />
     <None Include="Assets\Models\WaterTile.obj" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

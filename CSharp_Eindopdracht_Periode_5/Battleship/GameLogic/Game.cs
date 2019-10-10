@@ -29,6 +29,9 @@ namespace Battleship.GameLogic
         private World world;
         private GameCamera gameCamera;
 
+        private SelectionGrid playerGrid;
+        private SelectionGrid enemyGrid;
+
         public Game(Dispatcher dispatcher, ref Viewport3D viewport)
         {
             this.timing = Timing.GetInstance();
@@ -43,35 +46,52 @@ namespace Battleship.GameLogic
             this.gameCamera = new GameCamera(this);
             this.world.CurrentCamera = this.gameCamera.GetCamera();
 
-            DirectionalLight myDirectionalLight = new DirectionalLight();
-            myDirectionalLight.Color = Colors.White;
-            myDirectionalLight.Direction = new System.Windows.Media.Media3D.Vector3D(0, -1, -1);
-            this.world.AddLight(myDirectionalLight);
-
-            //Water water1 = new Water(this);
-            //water1.Position = new Vector3D(-5.5, -2.2, 0);
-            //this.world.AddGameObject(water1);
-            //Water water2 = new Water(this);
-            //water2.Position = new Vector3D(5.5, -2.2, 0);
-            //this.world.AddGameObject(water2);
+            DirectionalLight directionalLight = new DirectionalLight();
+            directionalLight.Color = Colors.White;
+            directionalLight.Direction = new Vector3D(0, -1, -1);
+            this.world.AddLight(directionalLight);
 
             GameObject gameObject = new GameObject(this);
             gameObject.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.AircraftCarrierModel));
             gameObject.Material = new DiffuseMaterial(Brushes.Blue);
             this.world.AddGameObject(gameObject);
 
-            SelectionGrid playerGrid = new SelectionGrid(this, true);
-            playerGrid.Position = new Vector3D(-5.5, 0, 0);
-            playerGrid.Marker.Position = new Vector3D(playerGrid.Position.X - 4.5, playerGrid.Position.Y, playerGrid.Position.Z - 4.5);
-            playerGrid.Ship = gameObject;
+            //SetupWater();
+            SetupGrids();
+            this.playerGrid.Ship = gameObject;
+        }
+
+        private void SetupWater()
+        {
+            Water water1 = new Water(this);
+            water1.Position = new Vector3D(-5.5, -2.2, 0);
+            this.world.AddGameObject(water1);
+            Water water2 = new Water(this);
+            water2.Position = new Vector3D(5.5, -2.2, 0);
+            this.world.AddGameObject(water2);
+        }
+
+        private void SetupGrids()
+        {
+            this.playerGrid = new SelectionGrid(this, true);
+            this.playerGrid.Position = new Vector3D(-5.5, 0, 0);
+            this.playerGrid.Marker.Position = new Vector3D(this.playerGrid.Position.X - 4.5, this.playerGrid.Position.Y, this.playerGrid.Position.Z - 4.5);
             this.world.AddGameObject(playerGrid.Marker);
             this.world.AddGameObject(playerGrid);
 
-            SelectionGrid enemyGrid = new SelectionGrid(this, false);
-            enemyGrid.Position = new Vector3D(5.5, 0, 0);
-            enemyGrid.Marker.Position = new Vector3D(enemyGrid.Position.X - 4.5, enemyGrid.Position.Y, enemyGrid.Position.Z - 4.5);
+            this.enemyGrid = new SelectionGrid(this, false);
+            this.enemyGrid.Position = new Vector3D(5.5, 0, 0);
+            this.enemyGrid.Marker.Position = new Vector3D(enemyGrid.Position.X - 4.5, enemyGrid.Position.Y, enemyGrid.Position.Z - 4.5);
             this.world.AddGameObject(enemyGrid.Marker);
             this.world.AddGameObject(enemyGrid);
+        }
+
+        private void OnKeyUp(Key key)
+        {
+            if (key == Key.Enter)
+            {
+
+            }
         }
 
         private void InitiliazeThread()

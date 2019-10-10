@@ -87,6 +87,8 @@ namespace Battleship_Server.GameLogic
                     if(enemyPlayer.HitPoints == 0)
                     {
                         this.session.Broadcast(new Message(Message.ID.END_GAME, Message.State.OK, Encoding.UTF8.GetBytes(gamePlayer.Player.GetUsername() + " won the game!")));
+                        gamePlayer.Player.IsReady = false;
+                        enemyPlayer.Player.IsReady = false;
                         return false;
                     }
                 }
