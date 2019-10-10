@@ -19,5 +19,20 @@ namespace Battleship.GameObjects
             this.isHit = isHit;
             this.position = position;
         }
+
+        public Point GetPosition()
+        {
+            return this.position;
+        }
+
+        public bool GetIsOccupied()
+        {
+            return this.isOccupied;
+        }
+
+        public bool GetIsHit()
+        {
+            return this.isHit;
+        }
     }
 }
