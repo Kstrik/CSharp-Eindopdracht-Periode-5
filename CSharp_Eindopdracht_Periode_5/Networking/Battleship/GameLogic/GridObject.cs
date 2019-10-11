@@ -45,7 +45,7 @@ namespace Networking.Battleship.GameLogic
             if ((int)this.direction == 3)
                 this.direction = Direction.UP;
             else
-                this.direction = this.direction++;
+                this.direction = (Direction)((int)this.direction + 1);
         }
 
         public void RotateLeft()
@@ -57,7 +57,7 @@ namespace Networking.Battleship.GameLogic
             if ((int)this.direction == 0)
                 this.direction = Direction.LEFT;
             else
-                this.direction = this.direction--;
+                this.direction = (Direction)((int)this.direction - 1);
         }
 
         public (int indexX, int indexY) GetIndexFront()

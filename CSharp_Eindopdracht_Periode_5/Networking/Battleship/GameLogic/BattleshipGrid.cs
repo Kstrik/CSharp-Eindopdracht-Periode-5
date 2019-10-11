@@ -84,13 +84,25 @@ namespace Networking.Battleship.GameLogic
             (int indexX, int indexY) frontIndex = gridObject.GetIndexFront();
             (int indexX, int indexY) backIndex = gridObject.GetIndexBack();
 
-            if (frontIndex.indexX >= 0 && frontIndex.indexX < this.sizeX &&
-                frontIndex.indexY >= 0 && frontIndex.indexY < this.sizeY &&
-                backIndex.indexX >= 0 && backIndex.indexX < this.sizeX &&
-                backIndex.indexY >= 0 && backIndex.indexY < this.sizeY)
-                return true;
+            if (frontIndex.indexX < 0 || frontIndex.indexX >= this.sizeX ||
+                frontIndex.indexY < 0 || frontIndex.indexY >= this.sizeY ||
+                backIndex.indexX < 0 || backIndex.indexX >= this.sizeX ||
+                backIndex.indexY < 0 || backIndex.indexY >= this.sizeY)
+                return false;
 
-            return false;
+            foreach((int indexX, int indexY) index in gridObject.GetCoveredIndices())
+            {
+                if (this.nodes[index.indexX, index.indexY].IsOccupied)
+                    return false;
+            }
+
+            //if (frontIndex.indexX >= 0 && frontIndex.indexX < this.sizeX &&
+            //    frontIndex.indexY >= 0 && frontIndex.indexY < this.sizeY &&
+            //    backIndex.indexX >= 0 && backIndex.indexX < this.sizeX &&
+            //    backIndex.indexY >= 0 && backIndex.indexY < this.sizeY)
+            //    return true;
+
+            return true;
         }
 
         public void PlaceGridObject(GridObject gridObject)

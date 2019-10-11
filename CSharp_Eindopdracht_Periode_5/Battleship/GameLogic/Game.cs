@@ -140,6 +140,7 @@ namespace Battleship.GameLogic
                 {
                     if (this.playerGrid.GetBattleshipGrid().CheckGridObjectPlacement(this.ships[this.currentShipsIndex].GridObject))
                     {
+                        this.playerGrid.GetBattleshipGrid().PlaceGridObject(this.playerGrid.Ship.GridObject);
                         currentShipsIndex++;
                         if(currentShipsIndex != this.ships.Count())
                         {

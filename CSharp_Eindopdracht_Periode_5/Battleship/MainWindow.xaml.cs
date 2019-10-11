@@ -3,8 +3,10 @@ using Battleship.Net;
 using Networking.Battleship;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,6 +21,11 @@ using System.Windows.Threading;
 
 namespace Battleship
 {
+    public class CustomCancelvent : CancelEventArgs
+    {
+        public bool IsUserEvent = true;
+    }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -30,6 +37,7 @@ namespace Battleship
         private string sessionName;
         private string sessionId;
         private bool isHost;
+
 
         public MainWindow(BattleshipClient battleshipClient, string sessionName, string sessionId, bool isHost)
         {
@@ -110,11 +118,10 @@ namespace Battleship
             }
         }
 
-        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             this.game.Stop();
-            this.battleshipClient.Transmit(new Message(Message.ID.END_GAME, Message.State.NONE, null));
-            this.battleshipClient.Transmit(new Message(Message.ID.LEAVE_SESSION, Message.State.NONE, null));
+            Environment.Exit(0);
         }
 
         private void StartGame_Click(object sender, RoutedEventArgs e)
@@ -158,7 +165,31 @@ namespace Battleship
                                 MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
                                 LobbyWindow lobbyWindow = new LobbyWindow(this.battleshipClient, this.sessionName, this.sessionId, this.isHost);
                                 lobbyWindow.Show();
-                                this.Close();
+                                this.Hide();
+                            }
+                            break;
+                        }
+                    case Message.ID.REMOVE_PLAYER:
+                        {
+                            if (message.GetState() == Message.State.OK)
+                            {
+                                this.game.Stop();
+                                MessageBox.Show("Match ended, player enemy disconnected!");
+                                LobbyWindow lobbyWindow = new LobbyWindow(this.battleshipClient, this.sessionName, this.sessionId, this.isHost);
+                                lobbyWindow.Show();
+                                this.Hide();
+                            }
+                            break;
+                        }
+                    case Message.ID.LEAVE_SESSION:
+                        {
+                            if (message.GetState() == Message.State.OK)
+                            {
+                                this.game.Stop();
+                                MessageBox.Show("Match ended, player enemy disconnected!");
+                                LobbyWindow lobbyWindow = new LobbyWindow(this.battleshipClient, this.sessionName, this.sessionId, this.isHost);
+                                lobbyWindow.Show();
+                                this.Hide();
                             }
                             break;
                         }

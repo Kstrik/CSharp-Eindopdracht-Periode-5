@@ -52,6 +52,13 @@ namespace Battleship_Server.Net
         {
             if(player != null)
             {
+                if(this.game != null)
+                {
+                    this.game = null;
+                    foreach (Player playerInSession in this.players)
+                        playerInSession.IsReady = false;
+                }
+
                 if (player == this.host)
                 {
                     foreach(Player playerInSession in this.players)

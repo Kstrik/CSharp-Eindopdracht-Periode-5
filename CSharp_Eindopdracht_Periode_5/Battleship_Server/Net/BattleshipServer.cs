@@ -157,7 +157,7 @@ namespace Battleship_Server.Net
                     }
                 default:
                     {
-                        player.Session.HandleMessage(message, player);
+                        player.Session?.HandleMessage(message, player);
                         break;
                     }
             }
