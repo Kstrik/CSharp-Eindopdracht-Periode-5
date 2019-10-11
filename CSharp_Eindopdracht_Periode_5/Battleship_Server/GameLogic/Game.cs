@@ -91,7 +91,7 @@ namespace Battleship_Server.GameLogic
                 if (enemyPlayer.GetGrid().ExecuteMove(indexX, indexY))
                 {
                     bytes.Add(1);
-                    bytes.AddRange(Encoding.UTF8.GetBytes(enemyPlayer.Player.GetUsername()));
+                    bytes.AddRange(Encoding.UTF8.GetBytes(gamePlayer.Player.GetUsername()));
 
                     this.session.Broadcast(new Message(Message.ID.SUBMIT_MOVE, Message.State.OK, bytes.ToArray()));
                     enemyPlayer.HitPoints--;
@@ -107,7 +107,7 @@ namespace Battleship_Server.GameLogic
                 else
                 {
                     bytes.Add(0);
-                    bytes.AddRange(Encoding.UTF8.GetBytes(enemyPlayer.Player.GetUsername()));
+                    bytes.AddRange(Encoding.UTF8.GetBytes(gamePlayer.Player.GetUsername()));
 
                     this.currentTurnIndex = (this.currentTurnIndex == 0) ? 1 : 0;
                     this.session.Broadcast(new Message(Message.ID.SUBMIT_MOVE, Message.State.OK, bytes.ToArray()));

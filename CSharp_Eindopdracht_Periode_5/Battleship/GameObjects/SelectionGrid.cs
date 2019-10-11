@@ -42,12 +42,12 @@ namespace Battleship.GameObjects
         private bool isActive;
         private bool isFriendly;
 
-        public SelectionGrid(Game game, bool isFriendly)
+        public SelectionGrid(Game game, bool isFriendly, Vector3D position)
             : base(game)
         {
+            this.Position = position;
             this.battleshipGrid = new BattleshipGrid(1, 10, 10, new Point3D(this.Position.X, this.Position.Y, this.Position.Z));
             //this.gridObject = new GridObject(1, 0, 0);
-            this.Ship = new Ship(game, 1);
 
             this.index = new Point(0, 0);
             this.isFriendly = isFriendly;
@@ -57,9 +57,11 @@ namespace Battleship.GameObjects
             this.Material = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(Asset.GridImage, UriKind.Absolute))));
 
             this.Marker = new GameObject(game);
-            //this.Marker.Position = new Vector3D(this.Position.X - 4.5, this.Position.Y, this.Position.Z - 4.5);
+            this.Marker.Position = new Vector3D(this.Position.X - 4.5, this.Position.Y, this.Position.Z - 4.5);
             this.Marker.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.HighlighterModel));
             this.Marker.Material = new DiffuseMaterial(Brushes.Blue);
+
+            this.Ship = new Ship(game, 1);
 
             GameInput.KeyUp += OnKeyUp;
             SetActive(true);
@@ -193,7 +195,10 @@ namespace Battleship.GameObjects
         {
             this.ship = ship;
             if(ship != null)
+            {
                 this.ship.GridObject.SetOriginIndex((int)this.index.X, (int)this.index.Y);
+                this.ship.Position = this.Marker.Position;
+            }
         }
     }
 }

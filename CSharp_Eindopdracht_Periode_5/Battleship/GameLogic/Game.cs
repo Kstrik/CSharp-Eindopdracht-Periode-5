@@ -41,8 +41,9 @@ namespace Battleship.GameLogic
         private bool isInSetup;
 
         private BattleshipClient battleshipClient;
+        private bool isHost;
 
-        public Game(Dispatcher dispatcher, ref Viewport3D viewport, BattleshipClient battleshipClient)
+        public Game(Dispatcher dispatcher, ref Viewport3D viewport, BattleshipClient battleshipClient, bool isHost)
         {
             this.timing = Timing.GetInstance();
             this.mainDispatcher = dispatcher;
@@ -50,6 +51,7 @@ namespace Battleship.GameLogic
             this.isRunning = false;
 
             this.battleshipClient = battleshipClient;
+            this.isHost = isHost;
             this.ships = new List<Ship>();
             this.currentShipsIndex = 0;
             this.isInSetup = true;
@@ -116,15 +118,15 @@ namespace Battleship.GameLogic
 
         private void SetupGrids()
         {
-            this.playerGrid = new SelectionGrid(this, true);
-            this.playerGrid.Position = new Vector3D(-5.5, 0, 0);
-            this.playerGrid.Marker.Position = new Vector3D(this.playerGrid.Position.X - 4.5, this.playerGrid.Position.Y, this.playerGrid.Position.Z - 4.5);
+            this.playerGrid = new SelectionGrid(this, true, new Vector3D(-5.5, 0, 0));
+            //this.playerGrid.Position = new Vector3D(-5.5, 0, 0);
+            //this.playerGrid.Marker.Position = new Vector3D(this.playerGrid.Position.X - 4.5, this.playerGrid.Position.Y, this.playerGrid.Position.Z - 4.5);
             this.world.AddGameObject(playerGrid.Marker);
             this.world.AddGameObject(playerGrid);
 
-            this.enemyGrid = new SelectionGrid(this, false);
-            this.enemyGrid.Position = new Vector3D(5.5, 0, 0);
-            this.enemyGrid.Marker.Position = new Vector3D(enemyGrid.Position.X - 4.5, enemyGrid.Position.Y, enemyGrid.Position.Z - 4.5);
+            this.enemyGrid = new SelectionGrid(this, false, new Vector3D(5.5, 0, 0));
+            //this.enemyGrid.Position = new Vector3D(5.5, 0, 0);
+            //this.enemyGrid.Marker.Position = new Vector3D(this.enemyGrid.Position.X - 4.5, this.enemyGrid.Position.Y, this.enemyGrid.Position.Z - 4.5);
             this.world.AddGameObject(enemyGrid.Marker);
             this.world.AddGameObject(enemyGrid);
             this.enemyGrid.IsActive = false;
@@ -168,65 +170,44 @@ namespace Battleship.GameLogic
                     bytes.Add((byte)this.playerGrid.GetIndex().Y);
                     bytes.AddRange(Encoding.UTF8.GetBytes(UserLogin.Username));
 
-                    GameInput.KeyUp -= OnKeyUp;
                     this.battleshipClient.Transmit(new Message(Message.ID.SUBMIT_MOVE, Message.State.NONE, bytes.ToArray()));
+                    GameInput.KeyUp -= OnKeyUp;
                 }
             }
         }
 
-        public void HandleMessage(Message message)
+        public void StartMatch()
         {
-            List<byte> content = new List<byte>(message.GetContent());
+            this.isInSetup = false;
+            this.playerGrid.IsActive = false;
+            this.enemyGrid.IsActive = true;
 
-            switch (message.GetId())
-            {
-                case Message.ID.START_MATCH:
-                    {
-                        if (message.GetState() == Message.State.OK)
-                        {
-                            this.isInSetup = false;
-                            this.playerGrid.IsActive = false;
-                            this.enemyGrid.IsActive = true;
-                            GameInput.KeyUp += OnKeyUp;
-                        }
-                        break;
-                    }
-                case Message.ID.SUBMIT_MOVE:
-                    {
-                        if (message.GetState() == Message.State.OK)
-                        {
-                            int indexX = content[0];
-                            int indexY = content[1];
-                            bool isHit = (content[2] == 1);
-                            string username = Encoding.UTF8.GetString(content.GetRange(3, content.Count - 3).ToArray());
+            if (this.isHost)
+                GameInput.KeyUp += OnKeyUp;
+        }
 
-                            Point3D position = new Point3D(0, 0, 0);
-                            BattleshipGrid battleshipGrid = (UserLogin.Username == username) ? this.playerGrid.GetBattleshipGrid() : this.enemyGrid.GetBattleshipGrid();
+        public void SubmitMove(int indexX, int indexY, bool isHit, string username)
+        {
+            Point3D position = new Point3D(0, 0, 0);
+            SelectionGrid selectionGrid = (UserLogin.Username != username) ? this.playerGrid : this.enemyGrid;
 
-                            position = battleshipGrid.GetWorldPosition(indexX, indexY);
-                            battleshipGrid.ExecuteMove(indexX, indexY);
+            position = selectionGrid.GetBattleshipGrid().GetWorldPosition(indexX, indexY);
+            selectionGrid.GetBattleshipGrid().ExecuteMove(indexX, indexY);
+            selectionGrid.UpdateMarkerMaterial();
 
-                            GameObject pin = new GameObject(this);
-                            pin.Position = new Vector3D(position.X, position.Y, position.Z);
-                            pin.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.PinModel));
-                            pin.Material = new DiffuseMaterial((isHit) ? Brushes.Red : Brushes.White);
-                            this.world.AddGameObject(pin);
+            GameObject pin = new GameObject(this);
+            pin.Position = new Vector3D(position.X, position.Y, position.Z);
+            pin.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.PinModel));
+            pin.Material = new DiffuseMaterial((isHit) ? Brushes.Red : Brushes.White);
+            this.world.AddGameObject(pin);
 
-                            if(isHit)
-                                GameInput.KeyUp += OnKeyUp;
-                        }
-                        else if(message.GetState() == Message.State.ERROR)
-                        {
-                            MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
-                            GameInput.KeyUp += OnKeyUp;
-                        }
-                        break;
-                    }
-                default:
-                    {
-                        break;
-                    }
-            }
+            if (isHit && UserLogin.Username == username || !isHit && UserLogin.Username != username)
+                GameInput.KeyUp += OnKeyUp;
+        }
+
+        public void OnSubmitMoveFailed()
+        {
+            GameInput.KeyUp += OnKeyUp;
         }
 
         private void InitiliazeThread()

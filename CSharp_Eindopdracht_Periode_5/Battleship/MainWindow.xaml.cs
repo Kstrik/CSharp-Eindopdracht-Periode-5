@@ -35,6 +35,8 @@ namespace Battleship
         {
             InitializeComponent();
 
+            this.Title = UserLogin.Username;
+
             this.battleshipClient = battleshipClient;
             this.battleshipClient.SetMessageReceiver(this);
 
@@ -42,7 +44,7 @@ namespace Battleship
             this.sessionId = sessionId;
             this.isHost = isHost;
 
-            this.game = new Game(Application.Current.Dispatcher, ref vwp, this.battleshipClient);
+            this.game = new Game(Application.Current.Dispatcher, ref vwp, this.battleshipClient, this.isHost);
 
             //this.Closing += MainWindow_Closing;
             this.game.Start();
@@ -54,7 +56,9 @@ namespace Battleship
             //grid = new Battleship.GameObjects.Grid(this.game);
 
             //this.Cursor = Cursors.None;
+            this.Closing += MainWindow_Closing;
         }
+
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             GameInput.OnKeyDown(e.Key);
@@ -109,6 +113,8 @@ namespace Battleship
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             this.game.Stop();
+            this.battleshipClient.Transmit(new Message(Message.ID.END_GAME, Message.State.NONE, null));
+            this.battleshipClient.Transmit(new Message(Message.ID.LEAVE_SESSION, Message.State.NONE, null));
         }
 
         private void StartGame_Click(object sender, RoutedEventArgs e)
@@ -156,9 +162,45 @@ namespace Battleship
                             }
                             break;
                         }
+                    case Message.ID.START_MATCH:
+                        {
+                            if (message.GetState() == Message.State.OK)
+                            {
+                                txb_Chat.Text += "Match started!" + Environment.NewLine;
+                                if(this.isHost)
+                                    txb_Chat.Text += "Your turn!" + Environment.NewLine;
+                                txb_Chat.ScrollToEnd();
+                                this.game.StartMatch();
+                            }
+                            break;
+                        }
+                    case Message.ID.SUBMIT_MOVE:
+                        {
+                            if (message.GetState() == Message.State.OK)
+                            {
+                                int indexX = content[0];
+                                int indexY = content[1];
+                                bool isHit = (content[2] == 1);
+                                string username = Encoding.UTF8.GetString(content.GetRange(3, content.Count - 3).ToArray());
+
+                                txb_Chat.Text += ((isHit) ? "Hit!" : "Missed!") + Environment.NewLine;
+                                if(isHit && UserLogin.Username == username || !isHit && UserLogin.Username != username)
+                                    txb_Chat.Text += "Your turn!" + Environment.NewLine;
+                                else
+                                    txb_Chat.Text += "Enemy turn!" + Environment.NewLine;
+                                txb_Chat.ScrollToEnd();
+
+                                this.game.SubmitMove(indexX, indexY, isHit, username);
+                            }
+                            else if (message.GetState() == Message.State.ERROR)
+                            {
+                                MessageBox.Show(Encoding.UTF8.GetString(content.ToArray()));
+                                this.game.OnSubmitMoveFailed();
+                            }
+                            break;
+                        }
                     default:
                         {
-                            this.game.HandleMessage(message);
                             break;
                         }
                 }

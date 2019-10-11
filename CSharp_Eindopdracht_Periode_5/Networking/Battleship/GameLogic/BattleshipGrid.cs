@@ -14,6 +14,7 @@ namespace Networking.Battleship.GameLogic
         private double nodeSize;
         private int sizeX, sizeY;
         private Point3D origin;
+        private Point3D startPoint;
 
         public BattleshipGrid(double nodeSize, int sizeX, int sizeY, Point3D origin)
         {
@@ -30,6 +31,10 @@ namespace Networking.Battleship.GameLogic
             this.sizeX = sizeX;
             this.sizeY = sizeY;
             this.origin = origin;
+
+            this.startPoint = new Point3D(origin.X, origin.Y, origin.Z);
+            this.startPoint.X -= (this.sizeX * this.nodeSize) / 2.0D - (this.nodeSize / 2);
+            this.startPoint.Z -= (this.sizeY * this.nodeSize) / 2.0D - (this.nodeSize / 2);
         }
 
         public BattleshipGrid(int sizeX, int sizeY)
@@ -57,16 +62,21 @@ namespace Networking.Battleship.GameLogic
             if (indexX >= this.sizeX || indexY >= this.sizeY)
                 return this.origin;
 
-            double stepSizeX = this.nodeSize, stepSizeY = this.nodeSize;
+            //double stepSizeX = this.nodeSize, stepSizeY = this.nodeSize;
 
-            if (this.sizeX % 2 == 0)
-                stepSizeX /= 2;
-            if (this.sizeY % 2 == 0)
-                stepSizeY /= 2;
+            //if (this.sizeX % 2 == 0)
+            //    stepSizeX /= 2;
+            //if (this.sizeY % 2 == 0)
+            //    stepSizeY /= 2;
 
-            double startX = (-stepSizeX * (this.sizeX / 2)), startY = (-stepSizeY * (this.sizeY / 2));
+            //double startX = (-stepSizeX * (this.sizeX / 2)), startY = (-stepSizeY * (this.sizeY / 2));
 
-            return new Point3D(indexX * stepSizeX + startX, this.origin.Y, indexY * stepSizeY + startY);
+            //double posX = this.startPoint.X + ((indexX + 1) * (this.nodeSize / 2.0D));
+            //double posZ = this.startPoint.Z + ((indexY + 1) * (this.nodeSize / 2.0D));
+            double posX = this.startPoint.X + (indexX * this.nodeSize);
+            double posZ = this.startPoint.Z + (indexY * this.nodeSize);
+
+            return new Point3D(posX, this.origin.Y, posZ);
         }
 
         public bool CheckGridObjectPlacement(GridObject gridObject)
