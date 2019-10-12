@@ -31,7 +31,7 @@ namespace Battleship_Server
 
         private void MainWindow_Closed(object sender, EventArgs e)
         {
-            this.battleshipServer.Stop();
+            this.battleshipServer?.Stop();
             Environment.Exit(0);
         }
 

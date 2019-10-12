@@ -178,5 +178,10 @@
   <ItemGroup>
     <Resource Include="Assets\Images\Water.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Sounds\HitSound.mp3" />
+    <Content Include="Assets\Sounds\MissSound.mp3" />
+    <Content Include="Assets\Sounds\SelectSound.mp3" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,5 @@
-﻿using Battleship.GameLogic;
+﻿using Battleship.Assets;
+using Battleship.GameLogic;
 using Battleship.Net;
 using Networking.Battleship;
 using System;
@@ -40,6 +41,8 @@ namespace Battleship
 
         //private bool isClosed;
 
+        private MediaPlayer mediaPlayer;
+
         public MainWindow(BattleshipClient battleshipClient, string sessionName, string sessionId, bool isHost)
         {
             InitializeComponent();
@@ -72,6 +75,8 @@ namespace Battleship
 
             txb_ChatMessage.GotFocus += Txb_ChatMessage_GotFocus;
             txb_ChatMessage.LostKeyboardFocus += Txb_ChatMessage_LostKeyboardFocus;
+
+            this.mediaPlayer = new MediaPlayer();
         }
 
         private void Txb_ChatMessage_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -253,6 +258,17 @@ namespace Battleship
                                 else
                                     txb_Chat.Text += "Enemy turn!" + Environment.NewLine;
                                 txb_Chat.ScrollToEnd();
+
+                                if (isHit)
+                                {
+                                    this.mediaPlayer.Open(new Uri(Asset.HitSound));
+                                    this.mediaPlayer.Play();
+                                }
+                                else
+                                {
+                                    this.mediaPlayer.Open(new Uri(Asset.MissSound));
+                                    this.mediaPlayer.Play();
+                                }
 
                                 this.game.SubmitMove(indexX, indexY, isHit, username);
                             }

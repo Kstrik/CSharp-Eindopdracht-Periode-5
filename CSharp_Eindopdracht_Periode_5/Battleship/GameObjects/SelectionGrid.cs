@@ -42,6 +42,8 @@ namespace Battleship.GameObjects
         private bool isActive;
         private bool isFriendly;
 
+        private MediaPlayer mediaPlayer;
+
         public SelectionGrid(Game game, bool isFriendly, Vector3D position)
             : base(game)
         {
@@ -64,6 +66,8 @@ namespace Battleship.GameObjects
 
             ActivateControls();
             SetActive(true);
+
+            this.mediaPlayer = new MediaPlayer();
         }
 
         private void OnKeyUp(Key key)
@@ -146,6 +150,9 @@ namespace Battleship.GameObjects
                 CheckPlacement();
             else
                 UpdateMarkerMaterial();
+
+            this.mediaPlayer.Open(new Uri(Asset.SelectSound));
+            this.mediaPlayer.Play();
         }
 
         public void CheckPlacement()

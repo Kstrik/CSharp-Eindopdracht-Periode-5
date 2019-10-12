@@ -28,5 +28,10 @@ namespace Battleship.Assets
         //Images
         public static string GridImage = assetsFolderPath + @"\Images\Grid.png";
         public static string WaterImage = assetsFolderPath + @"\Images\Water.jpg";
+
+        //Sounds
+        public static string HitSound = assetsFolderPath + @"\Sounds\HitSound.mp3";
+        public static string MissSound = assetsFolderPath + @"\Sounds\MissSound.mp3";
+        public static string SelectSound = assetsFolderPath + @"\Sounds\SelectSound.mp3";
     }
 }
