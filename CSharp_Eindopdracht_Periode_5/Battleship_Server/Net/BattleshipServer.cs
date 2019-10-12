@@ -18,10 +18,19 @@ namespace Battleship_Server.Net
         public BattleshipServer(string ip, int port)
         {
             this.server = new Server(ip, port, this, this, null);
-            this.server.Start();
 
             this.sessions = new List<Session>();
             this.players = new List<Player>();
+        }
+
+        public void Start()
+        {
+            this.server.Start();
+        }
+
+        public void Stop()
+        {
+            this.server.Stop();
         }
 
         public void AddSession(int maxClientCount, Player host, string name)
@@ -170,11 +179,14 @@ namespace Battleship_Server.Net
 
         public void OnClientDisconnected(ClientConnection connection)
         {
-            Player player = GetPlayer(connection);
-            player.Logout();
-            LeaveSession(player);
+            if(this.players.Count != 0)
+            {
+                Player player = GetPlayer(connection);
+                player.Logout();
+                LeaveSession(player);
 
-            this.players.Remove(player);
+                this.players.Remove(player);
+            }
         }
 
         private Player GetPlayer(ClientConnection connection)

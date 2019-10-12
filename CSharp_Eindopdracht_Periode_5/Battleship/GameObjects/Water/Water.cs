@@ -63,17 +63,17 @@ namespace Battleship.GameObjects.Water
         {
             base.Update(deltatime);
 
-            this.time += deltatime / 16;
+            this.time += deltatime / 4;
             if (this.time >= 100.0f)
             {
                 this.time = 0;
             }
 
             this.frameCounter++;
-            if (this.frameCounter == 17)
+            if (this.frameCounter == 5)
                 this.frameCounter = 0;
 
-            if(this.frameCounter == 16)
+            if(this.frameCounter == 4)
             {
                 for (int i = 0; i < this.vertexesCount; i++)
                 {

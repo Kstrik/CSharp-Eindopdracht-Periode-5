@@ -58,12 +58,6 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
-        <local:Container Header="Chat" Grid.Column="3" Grid.Row="3" Grid.RowSpan="2" Background="#FF1E1E1E" Foreground="#FF2D2D30" HeaderForeground="White" FontSize="12" Margin="2,2,2,2">
-            <TextBox x:Name="txb_Chat" Foreground="White" Background="#FF2D2D30" Margin="5,5,5,0" FontSize="12" BorderBrush="#FF686868" Height="70" IsReadOnly="True"></TextBox>
-            <TextBox x:Name="txb_ChatMessage" Foreground="White" Background="#FF2D2D30" Margin="5,5,5,0" FontSize="12" BorderBrush="#FF686868" Height="20"></TextBox>
-            <Button x:Name="btn_SendMessage" Content="Send" Height="30" Style="{StaticResource ButtonStyle}" Template="{DynamicResource ButtonControlTemplate}" Margin="5,5,5,5" Click="SendMessage_Click"></Button>
-        </local:Container>
-        
         <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="5"  Background="#FF007ACC" >
             <Label Content="Carrier"></Label>
             <Image Height="60" Name="carrier" Source="Assets/Images/Carrier.png" MouseDown="Ship_MouseDown">
@@ -78,5 +72,10 @@
             <Image Height="60" Name="destroyer" Source="Assets/Images/Destroyer.png" MouseDown="Ship_MouseDown"/>
         </StackPanel>
         <Viewport3D Name="vwp" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="5"></Viewport3D>
+        <local:Container Header="Chat" Grid.Column="3" Grid.Row="3" Grid.RowSpan="2" Background="#FF1E1E1E" Foreground="#FF2D2D30" HeaderForeground="White" FontSize="12" Margin="2,2,2,2">
+            <TextBox x:Name="txb_Chat" Foreground="White" Background="#FF2D2D30" Margin="5,5,5,0" FontSize="12" BorderBrush="#FF686868" Height="70" IsReadOnly="True"></TextBox>
+            <TextBox x:Name="txb_ChatMessage" Foreground="White" Background="#FF2D2D30" Margin="5,5,5,0" FontSize="12" BorderBrush="#FF686868" Height="20"></TextBox>
+            <Button x:Name="btn_SendMessage" Content="Send" Height="30" Style="{StaticResource ButtonStyle}" Template="{DynamicResource ButtonControlTemplate}" Margin="5,5,5,5" Click="SendMessage_Click"></Button>
+        </local:Container>
     </Grid>
 </Window>

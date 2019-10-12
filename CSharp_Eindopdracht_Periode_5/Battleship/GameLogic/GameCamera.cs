@@ -32,11 +32,13 @@ namespace Battleship.GameLogic
             : base(game)
         {
             this.camera = new PerspectiveCamera();
-            this.camera.Position = new Point3D(0, 10, 20);
+            //this.camera.Position = new Point3D(0, 10, 20);
+            this.camera.Position = new Point3D(0, 16, 15);
             this.camera.FieldOfView = 60;
 
             this.yaw = -90.0f;
-            this.pitch = -25.0f;
+            //this.pitch = -25.0f;
+            this.pitch = -50.0f;
             this.speed = 5f;
             this.sensitivity = 0.1f;
 
@@ -49,10 +51,7 @@ namespace Battleship.GameLogic
 
             UpdateVectors();
 
-            GameInput.KeyDown += OnKeyDown;
-            GameInput.KeyUp += OnKeyUp;
-            GameInput.MouseDown += OnMouseDown;
-            GameInput.MouseMove += OnMouseMove;
+            ActivateControls();
         }
 
         private void OnKeyDown(Key key)
@@ -129,6 +128,22 @@ namespace Battleship.GameLogic
         private double DegreesToRadians(double degrees)
         {
             return degrees * (Math.PI / 180);
+        }
+
+        public void ActivateControls()
+        {
+            GameInput.KeyDown += OnKeyDown;
+            GameInput.KeyUp += OnKeyUp;
+            GameInput.MouseDown += OnMouseDown;
+            GameInput.MouseMove += OnMouseMove;
+        }
+
+        public void ReleaseControls()
+        {
+            GameInput.KeyDown -= OnKeyDown;
+            GameInput.KeyUp -= OnKeyUp;
+            GameInput.MouseDown -= OnMouseDown;
+            GameInput.MouseMove -= OnMouseMove;
         }
 
         public PerspectiveCamera GetCamera()

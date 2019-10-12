@@ -38,12 +38,15 @@ namespace Battleship
         private string sessionId;
         private bool isHost;
 
+        //private bool isClosed;
 
         public MainWindow(BattleshipClient battleshipClient, string sessionName, string sessionId, bool isHost)
         {
             InitializeComponent();
 
             this.Title = UserLogin.Username;
+
+            //this.isClosed = false;
 
             this.battleshipClient = battleshipClient;
             this.battleshipClient.SetMessageReceiver(this);
@@ -65,7 +68,34 @@ namespace Battleship
 
             //this.Cursor = Cursors.None;
             this.Closing += MainWindow_Closing;
+            //this.Closed += MainWindow_Closed;
+
+            txb_ChatMessage.GotFocus += Txb_ChatMessage_GotFocus;
+            txb_ChatMessage.LostKeyboardFocus += Txb_ChatMessage_LostKeyboardFocus;
         }
+
+        private void Txb_ChatMessage_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            this.game.GetGameCamera().ActivateControls();
+            this.game.ActivateGridControls();
+        }
+
+        private void Txb_ChatMessage_GotFocus(object sender, RoutedEventArgs e)
+        {
+            this.game.GetGameCamera().ReleaseControls();
+            this.game.ReleaseGridControls();
+        }
+
+        //private void MainWindow_Closed(object sender, EventArgs e)
+        //{
+        //    if (e != null && this.isClosed == false)
+        //        Environment.Exit(0);
+        //    else if(this.isClosed == false)
+        //    {
+        //        this.isClosed = true;
+        //        this.Close();
+        //    }
+        //}
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
@@ -166,6 +196,7 @@ namespace Battleship
                                 LobbyWindow lobbyWindow = new LobbyWindow(this.battleshipClient, this.sessionName, this.sessionId, this.isHost);
                                 lobbyWindow.Show();
                                 this.Hide();
+                                //base.OnClosed(null);
                             }
                             break;
                         }
@@ -178,6 +209,7 @@ namespace Battleship
                                 LobbyWindow lobbyWindow = new LobbyWindow(this.battleshipClient, this.sessionName, this.sessionId, this.isHost);
                                 lobbyWindow.Show();
                                 this.Hide();
+                                //base.OnClosed(null);
                             }
                             break;
                         }
@@ -189,7 +221,8 @@ namespace Battleship
                                 MessageBox.Show("Match ended, player enemy disconnected!");
                                 LobbyWindow lobbyWindow = new LobbyWindow(this.battleshipClient, this.sessionName, this.sessionId, this.isHost);
                                 lobbyWindow.Show();
-                                this.Hide();
+                                //this.Hide();
+                                base.OnClosed(null);
                             }
                             break;
                         }

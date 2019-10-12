@@ -35,12 +35,11 @@ namespace Battleship
         {
             InitializeComponent();
 
-            if (this.battleshipClient == null)
-            {
-                this.battleshipClient = new BattleshipClient("127.0.0.1", 1551, this);
-                //this.battleshipClient = new BattleshipClient("192.168.10.121", 25575, this);
-            }
-            else
+            //if (battleshipClient == null)
+            //    this.battleshipClient = new BattleshipClient(ClientSettings.Ip, ClientSettings.Port, this);
+            //else
+            //    this.battleshipClient.SetMessageReceiver(this);
+            if (battleshipClient != null)
                 this.battleshipClient.SetMessageReceiver(this);
 
             this.slideAnimation = new ThicknessAnimation();
@@ -54,6 +53,29 @@ namespace Battleship
 
         public AuthorizationWindow()
             : this(null) { }
+
+        private void Connect_Click(object sender, RoutedEventArgs e)
+        {
+            if (!String.IsNullOrEmpty(txb_Ip.Text) || !String.IsNullOrEmpty(txb_Port.Text))
+            {
+                this.battleshipClient = new BattleshipClient(txb_Ip.Text, int.Parse(txb_Port.Text), this);
+                if (!this.battleshipClient.Connect())
+                {
+                    lbl_Error.Content = "Connection failed!";
+                    lbl_Error.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    stk_Connect.Visibility = Visibility.Collapsed;
+                    stk_Content.Visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                lbl_Error.Content = "Ip and port cannot be empty!";
+                lbl_Error.Visibility = Visibility.Visible;
+            }
+        }
 
         private void ShowRegister_Click(object sender, RoutedEventArgs e)
         {

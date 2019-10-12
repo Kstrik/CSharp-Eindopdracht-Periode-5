@@ -68,14 +68,8 @@ namespace Battleship.GameLogic
             directionalLight.Direction = new Vector3D(0, -1, -1);
             this.world.AddLight(directionalLight);
 
-            //Ship gameObject = new Ship(this, 5);
-            //gameObject.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.AircraftCarrierModel));
-            //gameObject.Material = new DiffuseMaterial(Brushes.Blue);
-            //this.world.AddGameObject(gameObject);
-
-            //SetupWater();
+            SetupWater();
             SetupGrids();
-            //this.playerGrid.Ship = gameObject;
 
             SetupShips();
             this.ships[0].Scaling = new Vector3D(1, 1, 1);
@@ -197,10 +191,15 @@ namespace Battleship.GameLogic
             selectionGrid.UpdateMarkerMaterial();
 
             GameObject pin = new GameObject(this);
-            pin.Position = new Vector3D(position.X, position.Y, position.Z);
+            pin.Position = new Vector3D(position.X, position.Y, position.Z) + new Vector3D(0, 0.25, 0);
             pin.GeometryModel = ModelUtil.ConvertToGeometryModel3D(new OBJModelLoader().LoadModel(Asset.PinModel));
             pin.Material = new DiffuseMaterial((isHit) ? Brushes.Red : Brushes.White);
+
+            this.world.RemoveGameObject(selectionGrid.Marker);
+            this.world.RemoveGameObject(selectionGrid);
             this.world.AddGameObject(pin);
+            this.world.AddGameObject(selectionGrid.Marker);
+            this.world.AddGameObject(selectionGrid);
 
             if (isHit && UserLogin.Username == username || !isHit && UserLogin.Username != username)
                 GameInput.KeyUp += OnKeyUp;
@@ -209,6 +208,18 @@ namespace Battleship.GameLogic
         public void OnSubmitMoveFailed()
         {
             GameInput.KeyUp += OnKeyUp;
+        }
+
+        public void ActivateGridControls()
+        {
+            this.playerGrid.ActivateControls();
+            this.enemyGrid.ActivateControls();
+        }
+
+        public void ReleaseGridControls()
+        {
+            this.playerGrid.ReleaseControls();
+            this.enemyGrid.ReleaseControls();
         }
 
         private void InitiliazeThread()
@@ -270,6 +281,11 @@ namespace Battleship.GameLogic
         public World GetWorld()
         {
             return this.world;
+        }
+
+        public GameCamera GetGameCamera()
+        {
+            return this.gameCamera;
         }
     }
 }

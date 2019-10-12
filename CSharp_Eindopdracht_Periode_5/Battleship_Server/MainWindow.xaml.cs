@@ -26,9 +26,45 @@ namespace Battleship_Server
         public MainWindow()
         {
             InitializeComponent();
+            this.Closed += MainWindow_Closed;
+        }
 
-            this.battleshipServer = new BattleshipServer("127.0.0.1", 1551);
-            //this.battleshipServer = new BattleshipServer("192.168.10.121", 25575);
+        private void MainWindow_Closed(object sender, EventArgs e)
+        {
+            this.battleshipServer.Stop();
+            Environment.Exit(0);
+        }
+
+        private void StartStop_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+
+            if(button.Content.ToString() == "Start")
+            {
+                if(!String.IsNullOrEmpty(txb_Ip.Text) || !String.IsNullOrEmpty(txb_Port.Text))
+                {
+                    this.battleshipServer = new BattleshipServer(txb_Ip.Text, int.Parse(txb_Port.Text));
+                    this.battleshipServer.Start();
+
+                    txb_Ip.IsEnabled = false;
+                    txb_Port.IsEnabled = false;
+                    button.Content = "Stop";
+                    lbl_Error.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    lbl_Error.Content = "Ip and port cannot be empty!";
+                    lbl_Error.Visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                this.battleshipServer.Stop();
+                this.battleshipServer = null;
+                txb_Ip.IsEnabled = true;
+                txb_Port.IsEnabled = true;
+                button.Content = "Start";
+            }
         }
     }
 }

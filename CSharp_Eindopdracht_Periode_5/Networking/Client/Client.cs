@@ -19,17 +19,19 @@ namespace Networking.Client
         private NetworkStream stream;
 
         private IServerDataReceiver receiver;
+        private IClientConnector connector;
         private ILogger logger;
 
         private Thread listenerThread;
 
-        public Client(string ip, int port, IServerDataReceiver receiver, ILogger logger)
+        public Client(string ip, int port, IServerDataReceiver receiver, IClientConnector connector, ILogger logger)
         {
             this.isReady = IPAddress.TryParse(ip, out host);
             this.isConnected = false;
 
             this.port = port;
             this.receiver = receiver;
+            this.connector = connector;
             this.logger = logger;
         }
 
@@ -41,7 +43,10 @@ namespace Networking.Client
                 {
                     byte[] bytes = Receive();
                     if (bytes.Length == 0)
+                    {
                         Disconnect();
+                        this.connector?.OnDisconnect();
+                    }
                     else
                         this.receiver?.OnDataReceived(bytes);
                 }
@@ -50,26 +55,30 @@ namespace Networking.Client
 
         public bool Connect()
         {
-            if (this.isReady && !this.isConnected)
+            try
             {
-                this.isConnected = true;
-                this.client = new TcpClient(this.host.ToString(), this.port);
-                this.stream = this.client.GetStream();
+                if (this.isReady && !this.isConnected)
+                {
+                    this.isConnected = true;
+                    this.client = new TcpClient(this.host.ToString(), this.port);
+                    this.stream = this.client.GetStream();
 
-                InitilizeListenerThread();
-                this.listenerThread.Start();
+                    InitilizeListenerThread();
+                    this.listenerThread.Start();
 
-                this.logger?.Log($"Client connected to {this.host} on port {this.port}\n");
-                return true;
+                    this.logger?.Log($"Client connected to {this.host} on port {this.port}\n");
+                    return true;
+                }
+                else if (!this.isReady)
+                {
+                    this.logger?.Log("Client could not connect due to invalid ip!\n");
+                }
+                else
+                {
+                    this.logger?.Log("Client is already connected!\n");
+                }
             }
-            else if (!this.isReady)
-            {
-                this.logger?.Log("Client could not connect due to invalid ip!\n");
-            }
-            else
-            {
-                this.logger?.Log("Client is already connected!\n");
-            }
+            catch (Exception e) { }
             return false;
         }
 

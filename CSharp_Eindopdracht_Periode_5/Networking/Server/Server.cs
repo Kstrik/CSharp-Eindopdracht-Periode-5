@@ -105,7 +105,7 @@ namespace Networking.Server
         {
             if (connection != null)
             {
-                this.connections.Remove(connection);
+                //this.connections.Remove(connection);
                 this.connector?.OnClientDisconnected(connection);
             }
         }
