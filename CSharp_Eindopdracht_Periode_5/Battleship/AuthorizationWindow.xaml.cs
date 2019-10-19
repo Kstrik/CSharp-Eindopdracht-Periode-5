@@ -40,7 +40,7 @@ namespace Battleship
             //else
             //    this.battleshipClient.SetMessageReceiver(this);
             if (battleshipClient != null)
-                this.battleshipClient.SetMessageReceiver(this);
+                this.battleshipClient?.SetMessageReceiver(this);
 
             this.slideAnimation = new ThicknessAnimation();
             this.slideAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(500));
