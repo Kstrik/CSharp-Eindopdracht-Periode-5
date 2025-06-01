@@ -13,7 +13,7 @@ namespace Networking.Battleship.GameLogic
 
         private double nodeSize;
         private int sizeX, sizeY;
-        private Point3D origin;
+        private Point3D origin; // Point3D is defined in System.Windows.Media.Media3D
         private Point3D startPoint;
 
         public BattleshipGrid(double nodeSize, int sizeX, int sizeY, Point3D origin)
